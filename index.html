@@ -519,6 +519,12 @@ function selectFeaturedItem(id){
   const item = ITEMS.find(x => x.id === id);
   if(!item) return;
   selectItem(item);
+}
+
+function selectFeaturedItem(id){
+  const item = ITEMS.find(x => x.id === id);
+  if(!item) return;
+  selectItem(item);
   buildItems();
   buildWeeklyBest();
 }
@@ -701,14 +707,21 @@ function resetApp(){
   selectedItem = null;
   selectedAddons = [];
   selectedOffice = "";
+  
+  selectedQty = 1; //
+  const qtyEl = document.getElementById("qty-value");
+  if (qtyEl) qtyEl.textContent = "1";
+
   document.getElementById("f-name").value = "";
   document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
   document.getElementById("btn1").disabled = true;
   goStep(1);
   buildItems();
+  buildWeeklyBest(); //
 }
 
 buildItems();
+buildWeeklyBest();
 </script>
 </body>
 </html>
