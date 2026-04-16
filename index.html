@@ -16,9 +16,14 @@
   --accent:#f0d98a;
   --accent-2:#f5c95a;
   --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.18);
   --shadow:0 10px 30px rgba(0,0,0,0.25);
   --radius:22px;
   --radius-sm:14px;
+  --purple:#f0d98a;
+  --teal:#1D9E75;
+  --teal-light:rgba(29,158,117,0.15);
+  --red:#f87171;
 }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
@@ -652,9 +657,6 @@ function buildAddons(){
         <div class="addon-name">${a.name}</div>
         <div class="addon-price">+₱${a.price.toFixed(2)}</div>
       </div>`;
-      if (selectedItem && selectedItem.id === it.id) {
-     d.classList.add("selected");
-}
     d.onclick = () => toggleAddon(a.id);
     g.appendChild(d);
   });
@@ -667,7 +669,6 @@ function selectItem(it){
 
   buildItems();
   renderSummaryMini();
-  renderSummaryFull();
 }
 
 function changeQty(change){
@@ -676,7 +677,6 @@ function changeQty(change){
 
   buildItems();
   renderSummaryMini();
-  renderSummaryFull();
 }
 
 function toggleAddon(id){
@@ -717,8 +717,9 @@ function getAddonsArr(){
 
 function renderSummaryMini(){
   const box = document.getElementById("summary-mini");
+  if(!box) return;
   const addOns = getAddonsArr();
-  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"} — ₱${selectedItem ? selectedItem.price.toFixed(2) : "0.00"}</span></div>`;
+  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"}${selectedItem && selectedQty > 1 ? " x"+selectedQty : ""} — ₱${selectedItem ? (selectedItem.price * selectedQty).toFixed(2) : "0.00"}</span></div>`;
   addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+₱${a.price.toFixed(2)}</span></div>`; });
   html += `<div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
   box.innerHTML = html;
