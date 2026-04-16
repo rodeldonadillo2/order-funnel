@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Order Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;
+    --teal:#1D9E75;--teal-light:#E1F5EE;
+    --red:#E24B4A;
+    --text:#1a1a2e;--text2:#555570;--text3:#8888a0;
+    --bg:#f7f7fb;--card:#ffffff;
+    --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+    --radius:12px;--radius-sm:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px 60px}
+
+  .brand{font-family:'DM Serif Display',serif;font-size:26px;color:var(--purple);letter-spacing:-0.5px;margin-bottom:6px;text-align:center}
+  .brand-sub{font-size:13px;color:var(--text3);text-align:center;margin-bottom:28px}
+
+  .gs-banner{width:100%;max-width:560px;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:var(--radius);padding:14px 16px;margin-bottom:20px}
+  .gs-banner strong{font-size:13px;color:#0C447C;display:block;margin-bottom:4px}
+  .gs-banner p{font-size:12px;color:#185FA5;margin-bottom:8px}
+  .gs-input{width:100%;padding:8px 12px;border:0.5px solid #85B7EB;border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text)}
+  .gs-input:focus{outline:none;border-color:#185FA5}
+
+  .card{width:100%;max-width:560px;background:var(--card);border-radius:var(--radius);border:0.5px solid var(--border);padding:24px}
+
+  .prog-wrap{margin-bottom:20px}
+  .prog-labels{display:flex;justify-content:space-between;margin-bottom:6px}
+  .prog-lbl{font-size:11px;color:var(--text3);flex:1;text-align:center}
+  .prog-lbl.active{color:var(--purple);font-weight:500}
+  .prog-lbl.done{color:var(--teal)}
+  .prog-bar{display:flex;gap:6px}
+  .prog-seg{flex:1;height:4px;border-radius:2px;background:var(--border)}
+  .prog-seg.done{background:var(--teal)}
+  .prog-seg.active{background:var(--purple)}
+
+  .step{display:none}
+  .step.active{display:block}
+
+  .step-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+  .step-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
+
+  .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;margin-bottom:20px}
+  .item-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;background:var(--card);transition:border-color 0.15s,transform 0.1s}
+  .item-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+  .item-card.selected{border:2px solid var(--purple);background:var(--purple-light)}
+  .item-img{width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:10px;overflow:hidden}
+  .item-img img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)}
+  .item-name{font-size:13px;font-weight:600;color:var(--text)}
+  .item-desc{font-size:11px;color:var(--text3);margin-top:2px}
+  .item-price{font-size:13px;color:var(--purple);font-weight:500;margin-top:4px}
+
+  .addon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .addon-card{border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;cursor:pointer;background:var(--card);display:flex;align-items:center;gap:10px;transition:border-color 0.1s}
+  .addon-card:hover{border-color:var(--border2)}
+  .addon-card.selected{border:2px solid var(--teal);background:var(--teal-light)}
+  .addon-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}
+  .addon-card.selected .addon-check{background:var(--teal);border-color:var(--teal)}
+  .checksvg{display:none}
+  .addon-card.selected .checksvg{display:block}
+  .addon-name{font-size:13px;font-weight:500;color:var(--text)}
+  .addon-price{font-size:12px;color:var(--teal);margin-top:1px}
+  .addon-skip{font-size:12px;color:var(--text3);text-align:center;margin-bottom:12px}
+
+  .summary-box{background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px}
+  .sum-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--text2)}
+  .sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:600;color:var(--text);border-top:0.5px solid var(--border);margin-top:8px;padding-top:8px}
+
+  .field-group{margin-bottom:16px}
+  .field-label{font-size:13px;color:var(--text2);margin-bottom:6px;display:block;font-weight:500}
+  .field-label span{color:var(--red);margin-left:2px}
+  .field-input{width:100%;padding:10px 14px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);transition:border-color 0.15s}
+  .field-input:focus{outline:none;border-color:var(--purple)}
+  .field-input.error{border-color:var(--red)}
+
+  .office-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .office-btn{padding:12px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;background:#fff;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);text-align:center;transition:border-color 0.1s,background 0.1s}
+  .office-btn:hover{border-color:var(--purple-mid)}
+  .office-btn.selected{border:2px solid var(--purple);background:var(--purple-light);color:var(--purple);font-weight:600}
+
+  .err-msg{color:var(--red);font-size:12px;margin-top:5px;display:none}
+
+  .btn-primary{width:100%;padding:13px;background:var(--purple);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.15s,transform 0.1s;margin-top:4px}
+  .btn-primary:hover{background:#3C3489}
+  .btn-primary:active{transform:scale(0.99)}
+  .btn-primary:disabled{background:#ccc;cursor:not-allowed;transform:none}
+  .btn-back{background:none;border:none;color:var(--text3);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;margin-bottom:18px;display:flex;align-items:center;gap:5px}
+  .btn-back:hover{color:var(--text)}
+  .btn-back svg{width:14px;height:14px}
+
+  .confirm-wrap{text-align:center;padding:12px 0}
+  .confirm-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  .confirm-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:6px}
+  .confirm-sub{font-size:14px;color:var(--text3);margin-bottom:20px}
+
+  @media(max-width:420px){
+    .item-grid{grid-template-columns:1fr 1fr}
+    .addon-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">Order Form</div>
+<div class="brand-sub">Select your item and place your order</div>
+
+<div class="gs-banner">
+  <strong>Google Sheets setup</strong>
+  <p>Paste your Google Apps Script Web App URL below to save orders to your sheet.</p>
+  <input class="gs-input" id="gs-url" placeholder="https://script.google.com/macros/s/.../exec"/>
+</div>
+
+<div class="card">
+  <div class="prog-wrap">
+    <div class="prog-labels">
+      <span class="prog-lbl active" id="pl1">Item</span>
+      <span class="prog-lbl" id="pl2">Add-ons</span>
+      <span class="prog-lbl" id="pl3">Details</span>
+      <span class="prog-lbl" id="pl4">Done</span>
+    </div>
+    <div class="prog-bar">
+      <div class="prog-seg active" id="ps1"></div>
+      <div class="prog-seg" id="ps2"></div>
+      <div class="prog-seg" id="ps3"></div>
+      <div class="prog-seg" id="ps4"></div>
+    </div>
+  </div>
+
+  <!-- Step 1: Item Selection -->
+  <div class="step active" id="step1">
+    <p class="step-title">Choose your item</p>
+    <p class="step-sub">Select one item to continue.</p>
+    <div class="item-grid" id="item-grid"></div>
+    <button class="btn-primary" id="btn1" disabled onclick="goStep(2)">Continue</button>
+  </div>
+
+  <!-- Step 2: Add-ons -->
+  <div class="step" id="step2">
+    <button class="btn-back" onclick="goStep(1)">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+      Back
+    </button>
+    <p class="step-title">Add-ons</p>
+    <p class="step-sub">Optional extras for your order.</p>
+    <div class="addon-grid" id="addon-grid"></div>
+    <p class="addon-skip">No add-ons? That's fine — just continue.</p>
+    <div class="summary-box" id="summary-mini"></div>
+    <button class="btn-primary" onclick="goStep(3)">Continue</button>
+  </div>
+
+  <!-- Step 3: Details -->
+  <div class="step" id="step3">
+    <button class="btn-back" onclick="goStep(2)">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+      Back
+    </button>
+    <p class="step-title">Your details</p>
+    <p class="step-sub">Almost done — just a couple of details.</p>
+    <div class="field-group">
+      <label class="field-label">Full name<span>*</span></label>
+      <input class="field-input" type="text" id="f-name" placeholder="e.g. Juan dela Cruz" oninput="clearErr('err-name','f-name')"/>
+      <div class="err-msg" id="err-name">Please enter your name.</div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Office<span>*</span></label>
+      <div class="office-opts">
+        <div class="office-btn" id="off-cam" onclick="selectOffice('Camerino')">Camerino</div>
+        <div class="office-btn" id="off-gue" onclick="selectOffice('Guevarra')">Guevarra</div>
+      </div>
+      <div class="err-msg" id="err-office">Please select an office.</div>
+    </div>
+    <div class="summary-box" id="summary-full"></div>
+    <button class="btn-primary" onclick="submitOrder()">Place order</button>
+  </div>
+
+  <!-- Step 4: Confirmation -->
+  <div class="step" id="step4">
+    <div class="confirm-wrap">
+      <div class="confirm-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <p class="confirm-title">Order received!</p>
+      <p class="confirm-sub" id="confirm-msg"></p>
+      <div class="summary-box" id="confirm-summary" style="text-align:left"></div>
+      <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ITEMS = [
+  {id:1, name:"Product A", desc:"Short description here", price:150, icon:"🧁"},
+  {id:2, name:"Product B", desc:"Short description here", price:200, icon:"🍱"},
+  {id:3, name:"Product C", desc:"Short description here", price:250, icon:"🧃"},
+  {id:4, name:"Product D", desc:"Short description here", price:180, icon:"🍜"},
+  {id:5, name:"Product E", desc:"Short description here", price:220, icon:"🥗"}
+];
+
+const ADDONS = [
+  {id:1, name:"Extra sauce",       price:20},
+  {id:2, name:"Double portion",    price:80},
+  {id:3, name:"Special packaging", price:30},
+  {id:4, name:"Rush prep",         price:50},
+  {id:5, name:"Add drink",         price:45}
+];
+
+let selectedItem = null;
+let selectedAddons = [];
+let selectedOffice = "";
+let currentStep = 1;
+
+function buildItems(){
+  const g = document.getElementById("item-grid");
+  g.innerHTML = "";
+  ITEMS.forEach(it => {
+    const d = document.createElement("div");
+    d.className = "item-card";
+    d.id = "item-" + it.id;
+    d.innerHTML = `
+      <div class="item-img">${it.icon}</div>
+      <div class="item-name">${it.name}</div>
+      <div class="item-desc">${it.desc}</div>
+      <div class="item-price">₱${it.price.toFixed(2)}</div>`;
+    d.onclick = () => selectItem(it);
+    g.appendChild(d);
+  });
+}
+
+function buildAddons(){
+  const g = document.getElementById("addon-grid");
+  g.innerHTML = "";
+  ADDONS.forEach(a => {
+    const sel = selectedAddons.includes(a.id);
+    const d = document.createElement("div");
+    d.className = "addon-card" + (sel ? " selected" : "");
+    d.id = "addon-" + a.id;
+    d.innerHTML = `
+      <div class="addon-check">
+        <svg class="checksvg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 5 4 8 9 2"/></svg>
+      </div>
+      <div>
+        <div class="addon-name">${a.name}</div>
+        <div class="addon-price">+₱${a.price.toFixed(2)}</div>
+      </div>`;
+    d.onclick = () => toggleAddon(a.id);
+    g.appendChild(d);
+  });
+}
+
+function selectItem(it){
+  selectedItem = it;
+  document.querySelectorAll(".item-card").forEach(c => c.classList.remove("selected"));
+  document.getElementById("item-" + it.id).classList.add("selected");
+  document.getElementById("btn1").disabled = false;
+}
+
+function toggleAddon(id){
+  const idx = selectedAddons.indexOf(id);
+  if(idx > -1) selectedAddons.splice(idx, 1);
+  else selectedAddons.push(id);
+  buildAddons();
+  renderSummaryMini();
+}
+
+function selectOffice(o){
+  selectedOffice = o;
+  document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
+  document.getElementById(o === "Camerino" ? "off-cam" : "off-gue").classList.add("selected");
+  document.getElementById("err-office").style.display = "none";
+  renderSummaryFull();
+}
+
+function clearErr(errId, inputId){
+  document.getElementById(errId).style.display = "none";
+  document.getElementById(inputId).classList.remove("error");
+}
+
+function calcTotal(){
+  let t = selectedItem ? selectedItem.price : 0;
+  selectedAddons.forEach(id => { const a = ADDONS.find(x => x.id === id); if(a) t += a.price; });
+  return t;
+}
+
+function getAddonsArr(){
+  return selectedAddons.map(id => ADDONS.find(x => x.id === id)).filter(Boolean);
+}
+
+function renderSummaryMini(){
+  const box = document.getElementById("summary-mini");
+  const addOns = getAddonsArr();
+  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"} — ₱${selectedItem ? selectedItem.price.toFixed(2) : "0.00"}</span></div>`;
+  addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+₱${a.price.toFixed(2)}</span></div>`; });
+  html += `<div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
+  box.innerHTML = html;
+}
+
+function renderSummaryFull(){
+  const box = document.getElementById("summary-full");
+  const addOns = getAddonsArr();
+  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"} — ₱${selectedItem ? selectedItem.price.toFixed(2) : "0.00"}</span></div>`;
+  addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+₱${a.price.toFixed(2)}</span></div>`; });
+  html += `<div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
+  box.innerHTML = html;
+}
+
+function goStep(n){
+  document.getElementById("step" + currentStep).classList.remove("active");
+  document.getElementById("step" + n).classList.add("active");
+  const labels = ["pl1","pl2","pl3","pl4"];
+  const segs = ["ps1","ps2","ps3","ps4"];
+  labels.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = "prog-lbl" + (i+1 < n ? " done" : i+1 === n ? " active" : "");
+  });
+  segs.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = "prog-seg" + (i+1 < n ? " done" : i+1 === n ? " active" : "");
+  });
+  if(n === 2){ buildAddons(); renderSummaryMini(); }
+  if(n === 3){ renderSummaryFull(); }
+  currentStep = n;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function submitOrder(){
+  let valid = true;
+  const name = document.getElementById("f-name").value.trim();
+  if(!name){
+    document.getElementById("err-name").style.display = "block";
+    document.getElementById("f-name").classList.add("error");
+    valid = false;
+  }
+  if(!selectedOffice){
+    document.getElementById("err-office").style.display = "block";
+    valid = false;
+  }
+  if(!valid) return;
+
+  const addOns = getAddonsArr();
+  const order = {
+    timestamp: new Date().toLocaleString("en-PH"),
+    name,
+    office: selectedOffice,
+    item: selectedItem.name,
+    item_price: selectedItem.price,
+    addons: addOns.map(a => a.name).join(", ") || "None",
+    addons_price: addOns.reduce((s, a) => s + a.price, 0),
+    total: calcTotal()
+  };
+
+  const gsUrl = document.getElementById("gs-url").value.trim();
+  if(gsUrl){
+    fetch(gsUrl, {
+      method: "POST",
+      body: JSON.stringify(order)
+    }).catch(() => {});
+  }
+
+  document.getElementById("confirm-msg").textContent =
+    `Thank you, ${name}! Your order will be ready at the ${selectedOffice} office.`;
+
+  const addOnsLine = addOns.length
+    ? `<div class="sum-row"><span>Add-ons</span><span>${addOns.map(a => a.name).join(", ")}</span></div>` : "";
+
+  document.getElementById("confirm-summary").innerHTML = `
+    <div class="sum-row"><span>Name</span><span>${name}</span></div>
+    <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
+    <div class="sum-row"><span>Item</span><span>${selectedItem.name}</span></div>
+    ${addOnsLine}
+    <div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
+
+  goStep(4);
+}
+
+function resetApp(){
+  selectedItem = null;
+  selectedAddons = [];
+  selectedOffice = "";
+  document.getElementById("f-name").value = "";
+  document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
+  document.getElementById("btn1").disabled = true;
+  goStep(1);
+  buildItems();
+}
+
+buildItems();
+</script>
+</body>
+</html>
