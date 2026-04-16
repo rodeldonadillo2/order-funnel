@@ -349,14 +349,20 @@ function submitOrder(){
     total: calcTotal()
   };
 
-   fetch("/api/order", {
-    method: "POST",
-   headers: {
+  fetch("/api/order", {
+  method: "POST",
+  headers: {
     "Content-Type": "application/json"
-   },
-    body: JSON.stringify(order)
-    }).catch(() => {});
-  }
+  },
+  body: JSON.stringify(order)
+  })
+  .then(async (res) => {
+    const text = await res.text();
+    console.log("API response:", text);
+  })
+  .catch((err) => {
+    console.error("Fetch failed:", err);
+  });
 
   document.getElementById("confirm-msg").textContent =
     `Thank you, ${name}! Your order will be ready at the ${selectedOffice} office.`;
