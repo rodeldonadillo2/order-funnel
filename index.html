@@ -7,17 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
 <style>
   :root{
-    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;
-    --teal:#1D9E75;--teal-light:#E1F5EE;
-    --red:#E24B4A;
-    --text:#1a1a2e;--text2:#555570;--text3:#8888a0;
-    --bg:#f7f7fb;--card:#ffffff;
-    --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
-    --radius:12px;--radius-sm:8px;
-  }
+  --bg:#23242d;
+  --card:#31323d;
+  --card-2:#3a3c48;
+  --text:#f5f1e8;
+  --text2:#d4cfbf;
+  --text3:#a7a39a;
+  --accent:#f0d98a;
+  --accent-2:#f5c95a;
+  --border:rgba(255,255,255,0.08);
+  --shadow:0 10px 30px rgba(0,0,0,0.25);
+  --radius:22px;
+  --radius-sm:14px;
+}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px 60px}
-
+  body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:24px 16px 60px;
+}
   .brand{font-family:'DM Serif Display',serif;font-size:26px;color:var(--purple);letter-spacing:-0.5px;margin-bottom:6px;text-align:center}
   .brand-sub{font-size:13px;color:var(--text3);text-align:center;margin-bottom:28px}
 
@@ -27,7 +40,14 @@
   .gs-input{width:100%;padding:8px 12px;border:0.5px solid #85B7EB;border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text)}
   .gs-input:focus{outline:none;border-color:#185FA5}
 
-  .card{width:100%;max-width:560px;background:var(--card);border-radius:var(--radius);border:0.5px solid var(--border);padding:24px}
+  .card{
+  width:100%;
+  max-width:560px;
+  background:transparent;
+  border-radius:var(--radius);
+  border:none;
+  padding:0;
+}
 
   .prog-wrap{margin-bottom:20px}
   .prog-labels{display:flex;justify-content:space-between;margin-bottom:6px}
@@ -97,6 +117,147 @@
   .confirm-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
   .confirm-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:6px}
   .confirm-sub{font-size:14px;color:var(--text3);margin-bottom:20px}
+  .hero-wrap{
+  margin-bottom:20px;
+}
+
+.hero-kicker{
+  color:#f0d98a;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:8px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+
+.hero-title{
+  font-size:38px;
+  line-height:1.05;
+  font-weight:700;
+  margin-bottom:10px;
+  color:var(--text);
+}
+
+.hero-sub{
+  color:var(--text2);
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.section-title{
+  font-size:16px;
+  font-weight:700;
+  color:#f0d98a;
+  margin:24px 0 14px;
+}
+
+.weekly-card{
+  background:linear-gradient(135deg,#3a3c48,#2f3039);
+  border-radius:24px;
+  padding:18px;
+  margin-bottom:18px;
+  color:#fff;
+}
+
+.weekly-badge{
+  display:inline-block;
+  background:#f0d98a;
+  color:#1f2027;
+  font-size:12px;
+  font-weight:700;
+  padding:7px 12px;
+  border-radius:999px;
+  margin-bottom:14px;
+}
+
+.weekly-content{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.weekly-text{
+  flex:1;
+}
+
+.weekly-text h3{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.weekly-text p{
+  font-size:14px;
+  color:#ddd6c8;
+  margin-bottom:12px;
+  line-height:1.45;
+}
+
+.weekly-price{
+  font-size:26px;
+  font-weight:700;
+  color:#f0d98a;
+  margin-bottom:14px;
+}
+
+.weekly-image{
+  flex-shrink:0;
+  width:170px;
+}
+
+.weekly-image img{
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  display:block;
+}
+
+.weekly-select-btn{
+  margin-top:10px;
+  border:none;
+  background:#f0d98a;
+  color:#1f2027;
+  font-weight:700;
+  padding:12px 16px;
+  border-radius:14px;
+  cursor:pointer;
+}
+
+.item-badge{
+  display:inline-block;
+  background:#f0d98a;
+  color:#1f2027;
+  font-size:11px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:999px;
+  margin-bottom:10px;
+}
+
+.qty-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.qty-btn{
+  width:36px;
+  height:36px;
+  border:none;
+  border-radius:12px;
+  background:#1f2027;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+
+#qty-value{
+  min-width:24px;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+}
 
   @media(max-width:420px){
     .item-grid{grid-template-columns:1fr 1fr}
@@ -129,9 +290,17 @@
 
   <!-- Step 1: Item Selection -->
   <div class="step active" id="step1">
-    <p class="step-title">Choose your item</p>
-    <p class="step-sub">Select one item to continue.</p>
+    <div class="hero-wrap">
+      <p class="hero-kicker">ACS Burgers</p>
+      <h1 class="hero-title">Big Flavor Burgers</h1>
+      <p class="hero-sub">Fresh beef burgers for office pickup.</p>
+    </div>
+  
+    <div id="weekly-best-wrap"></div>
+  
+    <p class="section-title">All Burgers</p>
     <div class="item-grid" id="item-grid"></div>
+  
     <button class="btn-primary" id="btn1" disabled onclick="goStep(2)">Continue</button>
   </div>
 
@@ -190,41 +359,140 @@
 
 <script>
 const ITEMS = [
-  {id:1, name:"Product A", desc:"Short description here", price:150, icon:"🧁"},
-  {id:2, name:"Product B", desc:"Short description here", price:200, icon:"🍱"},
-  {id:3, name:"Product C", desc:"Short description here", price:250, icon:"🧃"},
-  {id:4, name:"Product D", desc:"Short description here", price:180, icon:"🍜"},
-  {id:5, name:"Product E", desc:"Short description here", price:220, icon:"🥗"}
-];
-
-const ADDONS = [
-  {id:1, name:"Extra sauce",       price:20},
-  {id:2, name:"Double portion",    price:80},
-  {id:3, name:"Special packaging", price:30},
-  {id:4, name:"Rush prep",         price:50},
-  {id:5, name:"Add drink",         price:45}
+  {
+    id: 1,
+    name: "Jr.",
+    desc: "Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
+    price: 80,
+    img: "/images/jr.jpg",
+    bestseller: true,
+    weeklyBest: true,
+    popularity: 95
+  },
+  {
+    id: 2,
+    name: "Eggy",
+    desc: "With Egg + Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
+    price: 100,
+    img: "/images/eggy.jpg",
+    bestseller: true,
+    weeklyBest: false,
+    popularity: 90
+  },
+  {
+    id: 3,
+    name: "Jalapeno",
+    desc: "Pure Quarter Pound Beef + Jalapeno + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
+    price: 100,
+    img: "/images/jalapeno.jpg",
+    bestseller: false,
+    weeklyBest: false,
+    popularity: 75
+  },
+  {
+    id: 4,
+    name: "DoubleTeam",
+    desc: "Pure Double Quarter Pound Beef + Double Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
+    price: 115,
+    img: "/images/doubleteam.jpg",
+    bestseller: false,
+    weeklyBest: false,
+    popularity: 70
+  },
+  {
+    id: 5,
+    name: "Bacon",
+    desc: "Pure Quarter Pound Beef + Bacon + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
+    price: 115,
+    img: "/images/bacon.jpg",
+    bestseller: false,
+    weeklyBest: false,
+    popularity: 65
+  }
+];const ADDONS = [
+  {id:1, name:"Extra Mayo", price:10},
+  {id:2, name:"Extra cheese", price:15},
+  {id:3, name:"Extra Jalapeno", price:15},
+  {id:4, name:"Extra Bacon", price:35},
 ];
 
 let selectedItem = null;
 let selectedAddons = [];
 let selectedOffice = "";
 let currentStep = 1;
+let selectedQty = 1;
 
 function buildItems(){
   const g = document.getElementById("item-grid");
   g.innerHTML = "";
-  ITEMS.forEach(it => {
+
+  const sortedItems = [...ITEMS].sort((a, b) => b.popularity - a.popularity);
+
+  sortedItems.forEach(it => {
     const d = document.createElement("div");
     d.className = "item-card";
     d.id = "item-" + it.id;
+
     d.innerHTML = `
-      <div class="item-img">${it.icon}</div>
+      ${it.bestseller ? `<div class="item-badge">Best Seller</div>` : ""}
+      
+      <div class="item-img">
+        <img src="${it.img}" alt="${it.name}">
+      </div>
+
       <div class="item-name">${it.name}</div>
       <div class="item-desc">${it.desc}</div>
-      <div class="item-price">₱${it.price.toFixed(2)}</div>`;
+      <div class="item-price">₱${it.price.toFixed(2)}</div>
+    `;
+
     d.onclick = () => selectItem(it);
     g.appendChild(d);
   });
+}
+function buildWeeklyBest(){
+  const wrap = document.getElementById("weekly-best-wrap");
+  if(!wrap) return;
+
+  const item = ITEMS.find(x => x.weeklyBest);
+  if(!item){
+    wrap.innerHTML = "";
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="weekly-card">
+      <div class="weekly-badge">Best Seller This Week</div>
+      <div class="weekly-content">
+        <div class="weekly-text">
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <div class="weekly-price">₱${item.price.toFixed(2)}</div>
+
+          <div class="qty-wrap">
+            <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span id="qty-value">1</span>
+            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+
+          <button class="weekly-select-btn" onclick="selectFeaturedItem(${item.id})">
+            Select this item
+          </button>
+        </div>
+
+        <div class="weekly-image">
+          <img src="${item.img}" alt="${item.name}">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectFeaturedItem(id){
+  const item = ITEMS.find(x => x.id === id);
+  if(!item) return;
+  selectItem(item);
+  buildItems();
+  buildWeeklyBest();
 }
 
 function buildAddons(){
@@ -250,9 +518,24 @@ function buildAddons(){
 
 function selectItem(it){
   selectedItem = it;
+  selectedQty = 1;
   document.querySelectorAll(".item-card").forEach(c => c.classList.remove("selected"));
   document.getElementById("item-" + it.id).classList.add("selected");
   document.getElementById("btn1").disabled = false;
+
+  const qtyEl = document.getElementById("qty-value");
+  if (qtyEl) qtyEl.textContent = selectedQty;
+}
+
+function changeQty(change){
+  selectedQty += change;
+  if (selectedQty < 1) selectedQty = 1;
+
+  const qtyEl = document.getElementById("qty-value");
+  if (qtyEl) qtyEl.textContent = selectedQty;
+
+  renderSummaryMini();
+  renderSummaryFull();
 }
 
 function toggleAddon(id){
@@ -277,8 +560,13 @@ function clearErr(errId, inputId){
 }
 
 function calcTotal(){
-  let t = selectedItem ? selectedItem.price : 0;
-  selectedAddons.forEach(id => { const a = ADDONS.find(x => x.id === id); if(a) t += a.price; });
+  let t = selectedItem ? selectedItem.price * selectedQty : 0;
+
+  selectedAddons.forEach(id => {
+    const a = ADDONS.find(x => x.id === id);
+    if(a) t += a.price;
+  });
+
   return t;
 }
 
@@ -343,7 +631,8 @@ function submitOrder(){
     name,
     office: selectedOffice,
     item: selectedItem.name,
-    item_price: selectedItem.price,
+    quantity: selectedQty,
+    item_price: selectedItem.price * selectedQty,
     addons: addOns.map(a => a.name).join(", ") || "None",
     addons_price: addOns.reduce((s, a) => s + a.price, 0),
     total: calcTotal()
