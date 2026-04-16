@@ -68,7 +68,12 @@
   .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;margin-bottom:20px}
   .item-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;background:var(--card);transition:border-color 0.15s,transform 0.1s}
   .item-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-  .item-card.selected{border:2px solid var(--purple);background:var(--purple-light)}
+  .item-card.selected{
+  border:2px solid #f0d98a;
+  background:linear-gradient(135deg, #3a3c48, #2f3039);
+  box-shadow:0 0 0 2px rgba(240,217,138,0.25), 0 10px 30px rgba(0,0,0,0.35);
+  transform:translateY(-4px);
+}
   .item-img{width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:10px;overflow:hidden}
   .item-img img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)}
   .item-name{font-size:13px;font-weight:600;color:var(--text)}
@@ -250,7 +255,30 @@
   font-size:22px;
   cursor:pointer;
 }
+.selected-badge{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:#f0d98a;
+  color:#1f2027;
+  font-size:11px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:999px;
+  display:none;
+}
+.item-card.selected .item-img{
+  background:#000;
+}
 
+.item-card.selected img{
+  transform:scale(1.05);
+  transition:0.2s ease;
+}
+.item-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(0,0,0,0.25);
+}
 #qty-value{
   min-width:24px;
   text-align:center;
@@ -291,9 +319,9 @@
   <!-- Step 1: Item Selection -->
   <div class="step active" id="step1">
     <div class="hero-wrap">
-      <p class="hero-kicker">ACS Burgers</p>
-      <h1 class="hero-title">Big Flavor Burgers</h1>
-      <p class="hero-sub">Fresh beef burgers for office pickup.</p>
+      <p class="hero-kicker">Ned's</p>
+      <h1 class="hero-title">ACS Burgers</h1>
+      <p class="hero-sub">BURGER KA SAKEN!!!.</p>
     </div>
   
     <div id="weekly-best-wrap"></div>
@@ -435,7 +463,7 @@ function buildItems(){
 
     d.innerHTML = `
       ${it.bestseller ? `<div class="item-badge">Best Seller</div>` : ""}
-      
+      <div class="selected-badge">Selected</div>
       <div class="item-img">
         <img src="${it.img}" alt="${it.name}">
       </div>
