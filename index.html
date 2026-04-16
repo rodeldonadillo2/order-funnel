@@ -349,11 +349,12 @@ function submitOrder(){
     total: calcTotal()
   };
 
-  const gsUrl = document.getElementById("gs-url").value.trim();
-  if(gsUrl){
-    fetch(gsUrl, {
-      method: "POST",
-      body: JSON.stringify(order)
+   fetch("/api/order", {
+    method: "POST",
+   headers: {
+    "Content-Type": "application/json"
+   },
+    body: JSON.stringify(order)
     }).catch(() => {});
   }
 
