@@ -392,6 +392,26 @@
   color:#fff;
 }
 
+.payment-qr-box{
+  width:170px;
+  height:170px;
+  border-radius:18px;
+  background:linear-gradient(135deg, #3a3c48, #2f3039);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  margin:0 auto 16px;
+}
+
+.payment-qr-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+
 @media(max-width:420px){
     .item-grid{grid-template-columns:1fr 1fr}
     .addon-grid{grid-template-columns:1fr}
@@ -560,13 +580,11 @@
     </div>
     <div class="gcash-details" id="gcash-details">
       <div class="gcash-qr">
-        <!-- Replace with: <img src="/images/gcash-qr.png" alt="GCash QR"> -->
-        <!-- and remove the div below once you have the image -->
-        <div style="font-size:11px;color:var(--text3);padding:10px;line-height:1.5">Add your QR image here</div>
+        <img src="/images/payment-qr.jpg" alt="GoTyme / GCash QR">
       </div>
       <!-- Replace the number and name below with your actual GCash details -->
-      <div class="gcash-num">09XX XXX XXXX</div>
-      <div class="gcash-name">Account Name Here</div>
+      <div class="gcash-num">09683576159</div>
+      <div class="gcash-name">Rodel Donadillo</div>
     </div>
     <div class="pay-btn" id="pay-cash" onclick="selectPayment('Cash')">
       <div class="pay-icon" style="background:rgba(29,158,117,0.15)">💵</div>
@@ -771,7 +789,7 @@ const AVAILABLE_DATES = getAvailableDates();
       list.appendChild(div);
     });
     totalRow.style.display="flex";
-    totalEl.textContent="&#8369;"+grand.toFixed(2);
+    totalEl.textContent="₱"+grand.toFixed(2);
     btn.disabled=false;
   }
   
