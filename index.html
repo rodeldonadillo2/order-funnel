@@ -921,12 +921,17 @@ const AVAILABLE_DATES = getAvailableDates();
     if(!selectedPayment){document.getElementById("err-payment").style.display="block";return;}
     const name=document.getElementById("f-name").value.trim();
     const grand=cart.reduce((s,e)=>s+e.lineTotal,0);
-    const order={
-      timestamp:new Date().toLocaleString("en-PH"),
-      name, office:selectedOffice, pickup_date:selectedDate, payment:selectedPayment,
-      items:cart.map(e=>`${e.item.name}${e.qty>1?" x"+e.qty:""}${e.addons.length?" ("+e.addons.map(a=>a.name).join(", ")+")":""}`).join(" | "),
-      total:grand
-    };
+    const order = {
+  name,
+  office: selectedOffice,
+  item: selectedItem.name,
+  itemPrice: selectedItem.price,
+  addons: selectedAddons.map(a => a.name).join(", ") || "None",
+  addonsPrice: addonsTotal,
+  total: grand,
+  quantity: selectedQty,      // 👈 NEW
+  payment: selectedPayment    // 👈 NEW
+};
     fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)}).catch(()=>{});
   
     document.getElementById("confirm-msg").textContent=`Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
