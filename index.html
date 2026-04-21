@@ -929,8 +929,8 @@ const AVAILABLE_DATES = getAvailableDates();
   addons: selectedAddons.map(a => a.name).join(", ") || "None",
   addonsPrice: addonsTotal,
   total: grand,
-  quantity: selectedQty,      // 👈 NEW
-  payment: selectedPayment    // 👈 NEW
+  quantity: selectedQty,
+  payment: selectedPayment
 };
     fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)}).catch(()=>{});
   
