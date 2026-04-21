@@ -918,55 +918,72 @@ const AVAILABLE_DATES = getAvailableDates();
   
   /* ── Submit ── */
   function submitOrder(){
-    const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
-
-const itemNames = cart.map(e =>
-  `${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}`
-).join(" | ");
-
-const itemPrices = cart.map(e =>
-  `${(e.item.price * e.qty).toFixed(2)}`
-).join(" | ");
-
-const addonsText = cart.map(e =>
-  e.addons.length
-    ? `${e.item.name}: ${e.addons.map(a => a.name).join(", ")}`
-    : `${e.item.name}: None`
-).join(" | ");
-
-const addonsPriceTotal = cart.reduce((sum, e) => {
-  const addonTotal = e.addons.reduce((s, a) => s + a.price, 0);
-  return sum + addonTotal;
-}, 0);
-
-const order = {
-  name,
-  office: selectedOffice,
-  item: itemNames,
-  itemPrice: itemPrices,
-  addons: addonsText,
-  addonsPrice: addonsPriceTotal,
-  total: grand,
-  quantity: totalQty,
-  payment: selectedPayment
-};
-    fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)}).catch(()=>{});
-  
-    document.getElementById("confirm-msg").textContent=`Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
-    let itemsHtml="";
-    cart.forEach(e=>{
-      const addonsText=e.addons.length?" + "+e.addons.map(a=>a.name).join(", "):"";
-      itemsHtml+=`<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}${addonsText}</span><span>&#8369;${e.lineTotal.toFixed(2)}</span></div>`;
-    });
-    document.getElementById("confirm-summary").innerHTML=`
-      <div class="sum-row"><span>Name</span><span>${name}</span></div>
-      <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
-      <div class="sum-row"><span>Pickup date</span><span>${selectedDate}</span></div>
-      <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
-      <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">${itemsHtml}</div>
-      <div class="sum-total"><span>Grand total</span><span>&#8369;${grand.toFixed(2)}</span></div>`;
-    goStep(5);
+  if(!selectedPayment){
+    document.getElementById("err-payment").style.display = "block";
+    return;
   }
+
+  const name = document.getElementById("f-name").value.trim();
+  const grand = cart.reduce((sum, e) => sum + e.lineTotal, 0);
+
+  const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
+
+  const itemNames = cart.map(e =>
+    `${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}`
+  ).join(" | ");
+
+  const itemPrices = cart.map(e =>
+    `${(e.item.price * e.qty).toFixed(2)}`
+  ).join(" | ");
+
+  const addonsText = cart.map(e =>
+    e.addons.length
+      ? `${e.item.name}: ${e.addons.map(a => a.name).join(", ")}`
+      : `${e.item.name}: None`
+  ).join(" | ");
+
+  const addonsPriceTotal = cart.reduce((sum, e) => {
+    const addonTotal = e.addons.reduce((s, a) => s + a.price, 0);
+    return sum + addonTotal;
+  }, 0);
+
+  const order = {
+    name,
+    office: selectedOffice,
+    item: itemNames,
+    itemPrice: itemPrices,
+    addons: addonsText,
+    addonsPrice: addonsPriceTotal,
+    total: grand,
+    quantity: totalQty,
+    payment: selectedPayment
+  };
+
+  fetch("/api/order", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(order)
+  }).catch(() => {});
+
+  document.getElementById("confirm-msg").textContent =
+    `Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
+
+  let itemsHtml = "";
+  cart.forEach(e => {
+    const addonsText = e.addons.length ? " + " + e.addons.map(a => a.name).join(", ") : "";
+    itemsHtml += `<div class="sum-row"><span>${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}${addonsText}</span><span>₱${e.lineTotal.toFixed(2)}</span></div>`;
+  });
+
+  document.getElementById("confirm-summary").innerHTML = `
+    <div class="sum-row"><span>Name</span><span>${name}</span></div>
+    <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
+    <div class="sum-row"><span>Pickup date</span><span>${selectedDate}</span></div>
+    <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
+    <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">${itemsHtml}</div>
+    <div class="sum-total"><span>Grand total</span><span>₱${grand.toFixed(2)}</span></div>`;
+
+  goStep(5);
+}
   
   /* ── Reset ── */
   function resetApp(){
