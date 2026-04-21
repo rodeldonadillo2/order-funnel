@@ -933,8 +933,8 @@ const AVAILABLE_DATES = getAvailableDates();
   ).join(" | ");
 
   const itemPrices = cart.map(e =>
-    `${(e.item.price * e.qty).toFixed(2)}`
-  ).join(" | ");
+  `${(e.item.price * e.qty).toFixed(2)}`
+).join(" | ");
 
   const addonsText = cart.map(e =>
     e.addons.length
@@ -942,24 +942,24 @@ const AVAILABLE_DATES = getAvailableDates();
       : `${e.item.name}: None`
   ).join(" | ");
 
-  const addonsPriceTotal = cart.reduce((sum, e) => {
-    const addonTotal = e.addons.reduce((s, a) => s + a.price, 0);
-    return sum + addonTotal;
-  }, 0);
+  const addonsPrices = cart.map(e => {
+  const total = e.addons.reduce((s, a) => s + a.price, 0);
+  return total > 0 ? total.toFixed(2) : "None";
+}).join(" | ");
 
-  const order = {
-    name,
-    office: selectedOffice,
-    item: itemNames,
-    itemPrice: itemPrices,
-    addons: addonsText,
-    addonsPrice: addonsPriceTotal,
-    total: grand,
-    quantity: totalQty,
-    payment: selectedPayment
-  };
+const order = {
+  name,
+  office: selectedOffice,
+  item: itemNames,
+  itemPrice: itemPrices,
+  addons: addonsText,
+  addonsPrice: addonsPrices,
+  total: grand,
+  quantity: totalQty,
+  payment: selectedPayment
+};
 
-  fetch("/api/order", {
+  fetch("https://script.google.com/macros/s/AKfycbxNdZLscodGD3a0aEHyeO49MvF0rSaYMrw6IcHJ2TNWaa6kDEvQHsvBtQvWkHLlMK7tlw/exec", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify(order)
