@@ -464,6 +464,29 @@
   .gcash-qr img{width:100%;height:100%;object-fit:cover}
   .gcash-num{font-size:20px;font-weight:700;color:#f0d98a;margin-bottom:4px;letter-spacing:0.05em}
   .gcash-name{font-size:13px;color:var(--text2)}
+  
+  /* Modal overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-sheet{background:#2a2b35;border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:560px;transform:translateY(40px);transition:transform 0.25s;max-height:85vh;overflow-y:auto}
+.modal-overlay.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.2);margin:0 auto 20px}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text3);margin-bottom:18px}
+
+/* Receipt */
+.receipt{background:#fff;border-radius:16px;padding:20px;color:#111;font-family:'DM Sans',sans-serif;margin-top:16px}
+.receipt-header{text-align:center;border-bottom:1px dashed #ddd;padding-bottom:14px;margin-bottom:14px}
+.receipt-brand{font-family:'DM Serif Display',serif;font-size:22px;color:#1f2027;margin-bottom:2px}
+.receipt-sub{font-size:11px;color:#888;margin-bottom:8px}
+.receipt-num{font-size:12px;font-weight:700;color:#444;background:#f5f5f5;padding:4px 10px;border-radius:6px;display:inline-block}
+.receipt-meta{font-size:12px;color:#666;margin-top:8px}
+.receipt-section{border-bottom:1px dashed #ddd;padding-bottom:12px;margin-bottom:12px}
+.receipt-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:#333}
+.receipt-row.addon{font-size:11px;color:#888;padding-left:10px}
+.receipt-total-row{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#111;padding-top:8px}
+.receipt-footer{text-align:center;font-size:11px;color:#aaa;margin-top:12px}
+.btn-print{width:100%;padding:12px;background:#1f2027;color:#f0d98a;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:12px}
 </style>
 </head>
 <body>
@@ -603,7 +626,7 @@
   </div>
   <div class="err-msg" id="err-payment" style="margin-bottom:8px">Please select a payment method.</div>
   <div class="summary-box" id="payment-summary"></div>
-  <button class="btn-primary" onclick="submitOrder()">Place order</button>
+  <button class="btn-primary" onclick="openReviewModal()">Place order</button>
 </div>
 
 <!-- Step 5: Confirmation -->
@@ -614,7 +637,7 @@
     </div>
     <p class="confirm-title">Order received!</p>
     <p class="confirm-sub" id="confirm-msg"></p>
-    <div class="summary-box" id="confirm-summary" style="text-align:left"></div>
+    <div id="receipt-wrap"></div>
     <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
   </div>
 </div>
@@ -917,49 +940,63 @@ const AVAILABLE_DATES = getAvailableDates();
   }
   
   /* ── Submit ── */
-  function submitOrder(){
+  function openReviewModal() {
   if(!selectedPayment){
     document.getElementById("err-payment").style.display = "block";
     return;
   }
+  const name = document.getElementById("f-name").value.trim();
+  if(!name) return;
+  const grand = cart.reduce((s,e) => s + e.lineTotal, 0);
+  let html = `
+    <div class="sum-row"><span>Name</span><span>${name}</span></div>
+    <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
+    <div class="sum-row"><span>Pickup</span><span>${selectedDate}</span></div>
+    <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
+    <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">`;
+  cart.forEach(e => {
+    const addons = e.addons.length ? " + " + e.addons.map(a=>a.name).join(", ") : "";
+    html += `<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}${addons}</span><span>₱${e.lineTotal.toFixed(2)}</span></div>`;
+  });
+  html += `</div><div class="sum-total"><span>Grand total</span><span>₱${grand.toFixed(2)}</span></div>`;
+  document.getElementById("modal-summary").innerHTML = html;
+  document.getElementById("review-modal").classList.add("show");
+}
 
+function closeModal(e) {
+  if(e.target === document.getElementById("review-modal"))
+    document.getElementById("review-modal").classList.remove("show");
+}
+
+function confirmAndSubmit() {
+  document.getElementById("review-modal").classList.remove("show");
+  submitOrder();
+}
+
+function generateOrderNumber() {
+  return "ACS-" + Date.now().toString().slice(-6);
+}
+
+function submitOrder() {
   const name = document.getElementById("f-name").value.trim();
   const grand = cart.reduce((sum, e) => sum + e.lineTotal, 0);
-
   const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
+  const orderNum = generateOrderNumber();
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-PH", {year:"numeric",month:"long",day:"numeric"});
+  const timeStr = now.toLocaleTimeString("en-PH", {hour:"2-digit",minute:"2-digit"});
 
-  const itemNames = cart.map(e =>
-    `${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}`
-  ).join(" | ");
-
-  const itemPrices = cart.map(e =>
-  `${(e.item.price * e.qty).toFixed(2)}`
-).join(" | ");
-
-  const addonsText = cart.map(e =>
-    e.addons.length
-      ? `${e.item.name}: ${e.addons.map(a => a.name).join(", ")}`
-      : `${e.item.name}: None`
-  ).join(" | ");
-
+  const itemNames = cart.map(e => `${e.item.name}${e.qty>1?" x"+e.qty:""}`).join(" | ");
+  const itemPrices = cart.map(e => `${(e.item.price*e.qty).toFixed(2)}`).join(" | ");
+  const addonsText = cart.map(e => e.addons.length ? `${e.item.name}: ${e.addons.map(a=>a.name).join(", ")}` : `${e.item.name}: None`).join(" | ");
   const addonsPrices = cart.map(e => {
-  const total = e.addons.reduce((s, a) => s + a.price, 0);
-  return total > 0 ? total.toFixed(2) : "None";
-}).join(" | ");
+    const total = e.addons.reduce((s,a) => s+a.price, 0);
+    return total > 0 ? total.toFixed(2) : "None";
+  }).join(" | ");
 
-const order = {
-  name,
-  office: selectedOffice,
-  item: itemNames,
-  itemPrice: itemPrices,
-  addons: addonsText,
-  addonsPrice: addonsPrices,
-  total: grand,
-  quantity: totalQty,
-  payment: selectedPayment
-};
+  const order = { name, office: selectedOffice, item: itemNames, itemPrice: itemPrices, addons: addonsText, addonsPrice: addonsPrices, total: grand, quantity: totalQty, payment: selectedPayment, orderNumber: orderNum };
 
-  fetch("https://script.google.com/macros/s/AKfycbzK6-7vwP2_f744Ec2B2kZp5J97iLlshJl2Z-1RU06hUMxRlRMG3PeO0ESLeGeJlBCakw/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxNdZLscodGD3a0aEHyeO49MvF0rSaYMrw6IcHJ2TNWaa6kDEvQHsvBtQvWkHLlMK7tlw/exec", {
     method: "POST",
     headers: {"Content-Type":"text/plain"},
     body: JSON.stringify(order)
@@ -968,19 +1005,36 @@ const order = {
   document.getElementById("confirm-msg").textContent =
     `Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
 
-  let itemsHtml = "";
+  // Build receipt
+  let itemRows = "";
   cart.forEach(e => {
-    const addonsText = e.addons.length ? " + " + e.addons.map(a => a.name).join(", ") : "";
-    itemsHtml += `<div class="sum-row"><span>${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}${addonsText}</span><span>₱${e.lineTotal.toFixed(2)}</span></div>`;
+    itemRows += `<div class="receipt-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}</span><span>₱${(e.item.price*e.qty).toFixed(2)}</span></div>`;
+    if(e.addons.length) {
+      e.addons.forEach(a => {
+        itemRows += `<div class="receipt-row addon"><span>+ ${a.name}</span><span>₱${a.price.toFixed(2)}</span></div>`;
+      });
+    }
   });
 
-  document.getElementById("confirm-summary").innerHTML = `
-    <div class="sum-row"><span>Name</span><span>${name}</span></div>
-    <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
-    <div class="sum-row"><span>Pickup date</span><span>${selectedDate}</span></div>
-    <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
-    <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">${itemsHtml}</div>
-    <div class="sum-total"><span>Grand total</span><span>₱${grand.toFixed(2)}</span></div>`;
+  document.getElementById("receipt-wrap").innerHTML = `
+    <div class="receipt">
+      <div class="receipt-header">
+        <div class="receipt-brand">ACS Burgers</div>
+        <div class="receipt-sub">Official Order Receipt</div>
+        <div class="receipt-num">${orderNum}</div>
+        <div class="receipt-meta">${dateStr} · ${timeStr}</div>
+      </div>
+      <div class="receipt-section">
+        <div class="receipt-row"><span>Customer</span><span>${name}</span></div>
+        <div class="receipt-row"><span>Office</span><span>${selectedOffice}</span></div>
+        <div class="receipt-row"><span>Pickup</span><span>${selectedDate}</span></div>
+        <div class="receipt-row"><span>Payment</span><span>${selectedPayment}</span></div>
+      </div>
+      <div class="receipt-section">${itemRows}</div>
+      <div class="receipt-total-row"><span>TOTAL</span><span>₱${grand.toFixed(2)}</span></div>
+      <div class="receipt-footer">Thank you for your order! 🍔<br>This serves as your official receipt.</div>
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨 Print / Save receipt</button>`;
 
   goStep(5);
 }
@@ -1000,5 +1054,16 @@ const order = {
   buildItems();
   buildWeeklyBest();
   </script>
+  <!-- Order Review Modal -->
+<div class="modal-overlay" id="review-modal" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <p class="modal-title">Review your order</p>
+    <p class="modal-sub">Please check everything before confirming.</p>
+    <div class="summary-box" id="modal-summary" style="background:#1f2027"></div>
+    <button class="btn-primary" style="margin-top:12px;background:linear-gradient(135deg,#f0d98a,#e8c96a);color:#1f2027" onclick="confirmAndSubmit()">✓ Confirm & place order</button>
+    <button class="btn-back" style="width:100%;justify-content:center;margin-top:10px;margin-bottom:0" onclick="document.getElementById('review-modal').classList.remove('show')">Cancel</button>
+  </div>
+</div>
 </body>
 </html>
