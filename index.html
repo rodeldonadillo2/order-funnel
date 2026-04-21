@@ -961,7 +961,7 @@ const order = {
 
   fetch("https://script.google.com/macros/s/AKfycbxNdZLscodGD3a0aEHyeO49MvF0rSaYMrw6IcHJ2TNWaa6kDEvQHsvBtQvWkHLlMK7tlw/exec", {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
+    headers: {"Content-Type":"text/plain"},
     body: JSON.stringify(order)
   }).catch(() => {});
 
