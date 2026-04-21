@@ -918,18 +918,36 @@ const AVAILABLE_DATES = getAvailableDates();
   
   /* ── Submit ── */
   function submitOrder(){
-    if(!selectedPayment){document.getElementById("err-payment").style.display="block";return;}
-    const name=document.getElementById("f-name").value.trim();
-    const grand=cart.reduce((s,e)=>s+e.lineTotal,0);
-    const order = {
+    const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
+
+const itemNames = cart.map(e =>
+  `${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}`
+).join(" | ");
+
+const itemPrices = cart.map(e =>
+  `${(e.item.price * e.qty).toFixed(2)}`
+).join(" | ");
+
+const addonsText = cart.map(e =>
+  e.addons.length
+    ? `${e.item.name}: ${e.addons.map(a => a.name).join(", ")}`
+    : `${e.item.name}: None`
+).join(" | ");
+
+const addonsPriceTotal = cart.reduce((sum, e) => {
+  const addonTotal = e.addons.reduce((s, a) => s + a.price, 0);
+  return sum + addonTotal;
+}, 0);
+
+const order = {
   name,
   office: selectedOffice,
-  item: selectedItem.name,
-  itemPrice: selectedItem.price,
-  addons: selectedAddons.map(a => a.name).join(", ") || "None",
-  addonsPrice: addonsTotal,
+  item: itemNames,
+  itemPrice: itemPrices,
+  addons: addonsText,
+  addonsPrice: addonsPriceTotal,
   total: grand,
-  quantity: selectedQty,
+  quantity: totalQty,
   payment: selectedPayment
 };
     fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)}).catch(()=>{});
