@@ -392,10 +392,58 @@
   color:#fff;
 }
 
-  @media(max-width:420px){
+@media(max-width:420px){
     .item-grid{grid-template-columns:1fr 1fr}
     .addon-grid{grid-template-columns:1fr}
+    .date-grid{grid-template-columns:repeat(3,1fr)}
   }
+
+  /* Cart */
+  .cart-section{background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px}
+  .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .cart-title{font-size:13px;font-weight:600;color:var(--text)}
+  .cart-count{font-size:11px;background:var(--purple);color:#1f2027;padding:2px 8px;border-radius:10px;font-weight:700}
+  .cart-item{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--border)}
+  .cart-item:last-child{border-bottom:none}
+  .cart-item-info{flex:1}
+  .cart-item-name{font-size:13px;font-weight:500;color:var(--text)}
+  .cart-item-addons{font-size:11px;color:var(--text3);margin-top:2px}
+  .cart-item-right{display:flex;align-items:center;gap:8px}
+  .cart-item-price{font-size:13px;color:var(--purple);font-weight:500}
+  .cart-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0;line-height:1}
+  .cart-remove:hover{color:var(--red)}
+  .cart-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--text);border-top:0.5px solid var(--border2);margin-top:10px;padding-top:10px}
+  .cart-empty{font-size:13px;color:var(--text3);text-align:center;padding:8px 0}
+  .btn-add-cart{width:100%;padding:14px;background:linear-gradient(135deg,#f0d98a,#e8c96a);color:#1f2027;border:none;border-radius:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:transform 0.1s,box-shadow 0.15s;margin-bottom:10px;display:block}
+  .btn-add-cart:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(240,217,138,0.3)}
+  .btn-add-cart:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+  .btn-add-more{width:100%;padding:12px;background:transparent;color:var(--text2);border:0.5px solid var(--border2);border-radius:16px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:10px;display:block}
+  .btn-add-more:hover{background:var(--card)}
+
+  /* Date picker */
+  .date-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:8px}
+  .date-btn{padding:10px 8px;border:0.5px solid var(--border2);border-radius:12px;cursor:pointer;background:var(--card);font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);text-align:center;transition:border-color 0.15s}
+  .date-btn:hover{border-color:var(--accent)}
+  .date-btn.selected{border:2px solid #f0d98a;background:linear-gradient(135deg,#3a3c48,#2f3039);color:#f0d98a;font-weight:600}
+  .date-day{font-size:10px;color:var(--text3);margin-bottom:2px}
+  .date-btn.selected .date-day{color:var(--text3)}
+  .date-date{font-size:13px;font-weight:600}
+
+  /* Payment */
+  .pay-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+  .pay-btn{padding:14px 16px;border:0.5px solid var(--border2);border-radius:16px;cursor:pointer;background:var(--card);display:flex;align-items:center;gap:14px;transition:border-color 0.15s;text-align:left;width:100%;font-family:'DM Sans',sans-serif}
+  .pay-btn:hover{background:var(--card-2)}
+  .pay-btn.selected{border:2px solid #f0d98a;background:linear-gradient(135deg,#3a3c48,#2f3039)}
+  .pay-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .pay-info{flex:1}
+  .pay-name{font-size:14px;font-weight:600;color:var(--text)}
+  .pay-desc{font-size:12px;color:var(--text3);margin-top:2px}
+  .gcash-details{background:var(--bg);border-radius:var(--radius-sm);padding:16px;margin-bottom:4px;display:none;text-align:center}
+  .gcash-details.show{display:block}
+  .gcash-qr{width:150px;height:150px;background:var(--border);border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .gcash-qr img{width:100%;height:100%;object-fit:cover}
+  .gcash-num{font-size:20px;font-weight:700;color:#f0d98a;margin-bottom:4px;letter-spacing:0.05em}
+  .gcash-name{font-size:13px;color:var(--text2)}
 </style>
 </head>
 <body>
@@ -409,15 +457,17 @@
   <div class="prog-wrap">
     <div class="prog-labels">
       <span class="prog-lbl active" id="pl1">Item</span>
-      <span class="prog-lbl" id="pl2">Add-ons</span>
+      <span class="prog-lbl" id="pl2">Cart</span>
       <span class="prog-lbl" id="pl3">Details</span>
-      <span class="prog-lbl" id="pl4">Done</span>
+      <span class="prog-lbl" id="pl4">Payment</span>
+      <span class="prog-lbl" id="pl5">Done</span>
     </div>
     <div class="prog-bar">
       <div class="prog-seg active" id="ps1"></div>
       <div class="prog-seg" id="ps2"></div>
       <div class="prog-seg" id="ps3"></div>
       <div class="prog-seg" id="ps4"></div>
+      <div class="prog-seg" id="ps5"></div>
     </div>
   </div>
 
@@ -437,399 +487,460 @@
     <button class="btn-primary" id="btn1" disabled onclick="goStep(2)">Continue</button>
   </div>
 
-  <!-- Step 2: Add-ons -->
-  <div class="step" id="step2">
-    <button class="btn-back" onclick="goStep(1)">
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
-      Back
-    </button>
-    <p class="step-title">Add-ons</p>
-    <p class="step-sub">Optional extras for your order.</p>
-    <div class="addon-grid" id="addon-grid"></div>
-    <p class="addon-skip">No add-ons? That's fine — just continue.</p>
-    <div class="summary-box" id="summary-mini"></div>
-    <button class="btn-primary" onclick="goStep(3)">Continue</button>
+ <!-- Step 2: Add-ons + Cart -->
+ <div class="step" id="step2">
+  <button class="btn-back" onclick="goStep(1)">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+    Back
+  </button>
+  <p class="step-title">Add-ons</p>
+  <p class="step-sub">Optional extras for your selected item.</p>
+  <div class="addon-grid" id="addon-grid"></div>
+  <p class="addon-skip">No add-ons? That's fine — just add to cart.</p>
+  <div class="summary-box" id="current-item-summary"></div>
+  <button class="btn-add-cart" id="btn-add-cart" onclick="addToCart()">Add to cart</button>
+  <button class="btn-add-more" onclick="addAnotherItem()">+ Add another item</button>
+  <div class="cart-section">
+    <div class="cart-header">
+      <span class="cart-title">Your cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+    <div id="cart-items-list"><div class="cart-empty">No items yet.</div></div>
+    <div class="cart-total" id="cart-total-row" style="display:none">
+      <span>Total</span><span id="cart-grand-total">₱0.00</span>
+    </div>
   </div>
+  <button class="btn-primary" id="btn2-continue" disabled onclick="goStep(3)">Continue to details</button>
+</div>
 
-  <!-- Step 3: Details -->
-  <div class="step" id="step3">
-    <button class="btn-back" onclick="goStep(2)">
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
-      Back
-    </button>
-    <p class="step-title">Your details</p>
-    <p class="step-sub">Almost done — just a couple of details.</p>
-    <div class="field-group">
-      <label class="field-label">Full name<span>*</span></label>
-      <input class="field-input" type="text" id="f-name" placeholder="e.g. Juan dela Cruz" oninput="clearErr('err-name','f-name')"/>
-      <div class="err-msg" id="err-name">Please enter your name.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Office<span>*</span></label>
-      <div class="office-opts">
-        <div class="office-btn" id="off-cam" onclick="selectOffice('Camerino')">Camerino</div>
-        <div class="office-btn" id="off-gue" onclick="selectOffice('Guevarra')">Guevarra</div>
-      </div>
-      <div class="err-msg" id="err-office">Please select an office.</div>
-    </div>
-    <div class="summary-box" id="summary-full"></div>
-    <button class="btn-primary" onclick="submitOrder()">Place order</button>
+<!-- Step 3: Details -->
+<div class="step" id="step3">
+  <button class="btn-back" onclick="goStep(2)">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+    Back
+  </button>
+  <p class="step-title">Your details</p>
+  <p class="step-sub">Almost done — just a couple of details.</p>
+  <div class="field-group">
+    <label class="field-label">Full name<span>*</span></label>
+    <input class="field-input" type="text" id="f-name" placeholder="e.g. Juan dela Cruz" oninput="clearErr('err-name','f-name')"/>
+    <div class="err-msg" id="err-name">Please enter your name.</div>
   </div>
-
-  <!-- Step 4: Confirmation -->
-  <div class="step" id="step4">
-    <div class="confirm-wrap">
-      <div class="confirm-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <p class="confirm-title">Order received!</p>
-      <p class="confirm-sub" id="confirm-msg"></p>
-      <div class="summary-box" id="confirm-summary" style="text-align:left"></div>
-      <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
+  <div class="field-group">
+    <label class="field-label">Office<span>*</span></label>
+    <div class="office-opts">
+      <div class="office-btn" id="off-cam" onclick="selectOffice('Camerino')">Camerino</div>
+      <div class="office-btn" id="off-gue" onclick="selectOffice('Guevarra')">Guevarra</div>
     </div>
+    <div class="err-msg" id="err-office">Please select an office.</div>
+  </div>
+  <div class="field-group">
+    <label class="field-label">Pickup / Delivery date<span>*</span></label>
+    <div class="date-grid" id="date-grid"></div>
+    <div class="err-msg" id="err-date">Please select a date.</div>
+  </div>
+  <button class="btn-primary" onclick="goToPayment()">Continue to payment</button>
+</div>
+
+<!-- Step 4: Payment -->
+<div class="step" id="step4">
+  <button class="btn-back" onclick="goStep(3)">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
+    Back
+  </button>
+  <p class="step-title">Payment method</p>
+  <p class="step-sub">How would you like to pay?</p>
+  <div class="pay-opts">
+    <div class="pay-btn" id="pay-gcash" onclick="selectPayment('GCash')">
+      <div class="pay-icon" style="background:rgba(0,115,255,0.15)">💙</div>
+      <div class="pay-info">
+        <div class="pay-name">GCash</div>
+        <div class="pay-desc">Scan QR or send to number</div>
+      </div>
+    </div>
+    <div class="gcash-details" id="gcash-details">
+      <div class="gcash-qr">
+        <!-- Replace with: <img src="/images/gcash-qr.png" alt="GCash QR"> -->
+        <!-- and remove the div below once you have the image -->
+        <div style="font-size:11px;color:var(--text3);padding:10px;line-height:1.5">Add your QR image here</div>
+      </div>
+      <!-- Replace the number and name below with your actual GCash details -->
+      <div class="gcash-num">09XX XXX XXXX</div>
+      <div class="gcash-name">Account Name Here</div>
+    </div>
+    <div class="pay-btn" id="pay-cash" onclick="selectPayment('Cash')">
+      <div class="pay-icon" style="background:rgba(29,158,117,0.15)">💵</div>
+      <div class="pay-info">
+        <div class="pay-name">Cash</div>
+        <div class="pay-desc">Pay upon pickup</div>
+      </div>
+    </div>
+    <div class="pay-btn" id="pay-sahod" onclick="selectPayment('Sa Sahod na Boss Oma')">
+      <div class="pay-icon" style="background:rgba(240,217,138,0.15)">😅</div>
+      <div class="pay-info">
+        <div class="pay-name">Sa Sahod na Boss Oma</div>
+        <div class="pay-desc">Pay later — utang muna</div>
+      </div>
+    </div>
+  </div>
+  <div class="err-msg" id="err-payment" style="margin-bottom:8px">Please select a payment method.</div>
+  <div class="summary-box" id="payment-summary"></div>
+  <button class="btn-primary" onclick="submitOrder()">Place order</button>
+</div>
+
+<!-- Step 5: Confirmation -->
+<div class="step" id="step5">
+  <div class="confirm-wrap">
+    <div class="confirm-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <p class="confirm-title">Order received!</p>
+    <p class="confirm-sub" id="confirm-msg"></p>
+    <div class="summary-box" id="confirm-summary" style="text-align:left"></div>
+    <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
   </div>
 </div>
 
 <script>
-const ITEMS = [
-  {
-    id: 1,
-    name: "Jr.",
-    desc: "Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
-    price: 80,
-    img: "/images/jr.jpg",
-    bestseller: true,
-    weeklyBest: true,
-    popularity: 95
-  },
-  {
-    id: 2,
-    name: "Eggy",
-    desc: "With Egg + Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
-    price: 100,
-    img: "/images/eggy.jpg",
-    bestseller: true,
-    weeklyBest: false,
-    popularity: 90
-  },
-  {
-    id: 3,
-    name: "Jalapeno",
-    desc: "Pure Quarter Pound Beef + Jalapeno + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
-    price: 100,
-    img: "/images/jalapeno.jpg",
-    bestseller: false,
-    weeklyBest: false,
-    popularity: 75
-  },
-  {
-    id: 4,
-    name: "DoubleTeam",
-    desc: "Pure Double Quarter Pound Beef + Double Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
-    price: 115,
-    img: "/images/doubleteam.jpg",
-    bestseller: false,
-    weeklyBest: false,
-    popularity: 70
-  },
-  {
-    id: 5,
-    name: "Bacon",
-    desc: "Pure Quarter Pound Beef + Bacon + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",
-    price: 115,
-    img: "/images/bacon.jpg",
-    bestseller: false,
-    weeklyBest: false,
-    popularity: 65
-  }
-];const ADDONS = [
-  {id:1, name:"Extra Mayo", price:10},
-  {id:2, name:"Extra cheese", price:15},
-  {id:3, name:"Extra Jalapeno", price:15},
-  {id:4, name:"Extra Bacon", price:35},
-];
+  const ITEMS = [
+    {id:1,name:"Jr.",desc:"Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:80,img:"/images/jr.jpg",bestseller:true,weeklyBest:true,popularity:95},
+    {id:2,name:"Eggy",desc:"With Egg + Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:100,img:"/images/eggy.jpg",bestseller:true,weeklyBest:false,popularity:90},
+    {id:3,name:"Jalapeno",desc:"Pure Quarter Pound Beef + Jalapeno + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:100,img:"/images/jalapeno.jpg",bestseller:false,weeklyBest:false,popularity:75},
+    {id:4,name:"DoubleTeam",desc:"Pure Double Quarter Pound Beef + Double Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:115,img:"/images/doubleteam.jpg",bestseller:false,weeklyBest:false,popularity:70},
+    {id:5,name:"Bacon",desc:"Pure Quarter Pound Beef + Bacon + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:115,img:"/images/bacon.jpg",bestseller:false,weeklyBest:false,popularity:65}
+  ];
+  
+  const ADDONS = [
+    {id:1,name:"Extra Mayo",price:10},
+    {id:2,name:"Extra Cheese",price:15},
+    {id:3,name:"Extra Jalapeno",price:15},
+    {id:4,name:"Extra Bacon",price:35}
+  ];
+  
+  /* ── Edit these dates to control what customers can pick ── */
+  const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-let selectedItem = null;
-let selectedAddons = [];
-let selectedOffice = "";
-let currentStep = 1;
-let selectedQty = 1;
+// Allowed pickup days: Tuesday (2), Wednesday (3), Friday (5)
+const ALLOWED_DAYS = [2, 3, 5];
 
-function buildItems(){
-  const g = document.getElementById("item-grid");
-  g.innerHTML = "";
+// How many upcoming available dates to show
+const MAX_AVAILABLE_DATES = 6;
 
-  const sortedItems = [...ITEMS].sort((a, b) => b.popularity - a.popularity);
+function getAvailableDates() {
+  const results = [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  sortedItems.forEach(it => {
-    const d = document.createElement("div");
-    d.className = "item-card";
-    d.id = "item-" + it.id;
+  let cursor = new Date(today);
 
-    d.innerHTML = `
-      ${it.bestseller ? `<div class="item-badge">Best Seller</div>` : ""}
-      <div class="selected-badge">Selected</div>
+  while (results.length < MAX_AVAILABLE_DATES) {
+    const day = cursor.getDay();
 
-      <div class="item-img">
-        <img src="${it.img}" alt="${it.name}">
-      </div>
-
-      <div class="item-name">${it.name}</div>
-      <div class="item-desc">${it.desc}</div>
-      <div class="item-price">₱${it.price.toFixed(2)}</div>
-
-      ${selectedItem && selectedItem.id === it.id ? `
-        <div class="qty-wrap item-qty-wrap">
-          <button type="button" class="qty-btn" onclick="event.stopPropagation(); changeQty(-1)">−</button>
-          <span class="qty-value">${selectedQty}</span>
-          <button type="button" class="qty-btn" onclick="event.stopPropagation(); changeQty(1)">+</button>
-        </div>
-      ` : ""}
-    `;
-
-    if (selectedItem && selectedItem.id === it.id) {
-      d.classList.add("selected");
+    if (ALLOWED_DAYS.includes(day)) {
+      results.push({
+        label: DAY_LABELS[day],
+        date: `${MONTH_LABELS[cursor.getMonth()]} ${cursor.getDate()}`,
+        iso: cursor.toISOString().split("T")[0]
+      });
     }
 
-    d.onclick = () => selectItem(it);
-    g.appendChild(d);
-  });
-}
-function buildWeeklyBest(){
-  const wrap = document.getElementById("weekly-best-wrap");
-  if(!wrap) return;
-
-  const item = ITEMS.find(x => x.weeklyBest);
-  if(!item){
-    wrap.innerHTML = "";
-    return;
+    cursor.setDate(cursor.getDate() + 1);
   }
 
-  wrap.innerHTML = `
-    <div class="weekly-card">
-      <div class="weekly-badge">Best Seller This Week</div>
-      <div class="weekly-content">
-        <div class="weekly-text">
-          <h3>${item.name}</h3>
-          <p>${item.desc}</p>
-          <div class="weekly-price">₱${item.price.toFixed(2)}</div>
-
-          <button class="weekly-select-btn" onclick="selectFeaturedItem(${item.id})">
-            Select this item
-          </button>
-        </div>
-
-        <div class="weekly-image">
-          <img src="${item.img}" alt="${item.name}">
-        </div>
-      </div>
-    </div>
-  `;
+  return results;
 }
 
-function selectFeaturedItem(id){
-  const item = ITEMS.find(x => x.id === id);
-  if(!item) return;
-  selectItem(item);
-}
-
-function selectFeaturedItem(id){
-  const item = ITEMS.find(x => x.id === id);
-  if(!item) return;
-  selectItem(item);
+const AVAILABLE_DATES = getAvailableDates();
+  
+  /* ── State ── */
+  let selectedItem=null, selectedAddons=[], selectedQty=1;
+  let cart=[], selectedOffice="", selectedDate="", selectedPayment="";
+  let currentStep=1;
+  
+  /* ── Build: Items ── */
+  function buildItems(){
+    const g=document.getElementById("item-grid");
+    g.innerHTML="";
+    [...ITEMS].sort((a,b)=>b.popularity-a.popularity).forEach(it=>{
+      const d=document.createElement("div");
+      d.className="item-card"+(selectedItem&&selectedItem.id===it.id?" selected":"");
+      d.id="item-"+it.id;
+      d.innerHTML=`
+        ${it.bestseller?`<div class="item-badge">Best Seller</div>`:""}
+        <div class="item-img"><img src="${it.img}" alt="${it.name}"></div>
+        <div class="item-name">${it.name}</div>
+        <div class="item-desc">${it.desc}</div>
+        <div class="item-price">&#8369;${it.price.toFixed(2)}</div>
+        ${selectedItem&&selectedItem.id===it.id?`
+          <div class="qty-wrap">
+            <button type="button" class="qty-btn" onclick="event.stopPropagation();changeQty(-1)">&#8722;</button>
+            <span class="qty-value">${selectedQty}</span>
+            <button type="button" class="qty-btn" onclick="event.stopPropagation();changeQty(1)">+</button>
+          </div>`:""}`;
+      d.onclick=()=>selectItem(it);
+      g.appendChild(d);
+    });
+  }
+  
+  /* ── Build: Add-ons ── */
+  function buildAddons(){
+    const g=document.getElementById("addon-grid");
+    g.innerHTML="";
+    ADDONS.forEach(a=>{
+      const sel=selectedAddons.includes(a.id);
+      const d=document.createElement("div");
+      d.className="addon-card"+(sel?" selected":"");
+      d.id="addon-"+a.id;
+      d.innerHTML=`
+        <div class="addon-check">
+          <svg class="checksvg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 5 4 8 9 2"/></svg>
+        </div>
+        <div>
+          <div class="addon-name">${a.name}</div>
+          <div class="addon-price">+&#8369;${a.price.toFixed(2)}</div>
+        </div>`;
+      d.onclick=()=>toggleAddon(a.id);
+      g.appendChild(d);
+    });
+  }
+  
+  /* ── Build: Weekly Best ── */
+  function buildWeeklyBest(){
+    const wrap=document.getElementById("weekly-best-wrap");
+    if(!wrap)return;
+    const item=ITEMS.find(x=>x.weeklyBest);
+    if(!item){wrap.innerHTML="";return;}
+    wrap.innerHTML=`
+      <div class="weekly-card">
+        <div class="weekly-badge">Best Seller This Week</div>
+        <div class="weekly-content">
+          <div class="weekly-text">
+            <h3>${item.name}</h3><p>${item.desc}</p>
+            <div class="weekly-price">&#8369;${item.price.toFixed(2)}</div>
+            <button class="weekly-select-btn" onclick="selectFeaturedItem(${item.id})">Select this item</button>
+          </div>
+          <div class="weekly-image"><img src="${item.img}" alt="${item.name}"></div>
+        </div>
+      </div>`;
+  }
+  
+  /* ── Build: Dates ── */
+  function buildDates(){
+    const g=document.getElementById("date-grid");
+    g.innerHTML="";
+    AVAILABLE_DATES.forEach(d=>{
+      const btn=document.createElement("div");
+      btn.className="date-btn"+(selectedDate===d.date?" selected":"");
+      btn.innerHTML=`<div class="date-day">${d.label}</div><div class="date-date">${d.date}</div>`;
+      btn.onclick=()=>selectDate(d.date);
+      g.appendChild(btn);
+    });
+  }
+  
+  /* ── Build: Cart ── */
+  function buildCart(){
+    const list=document.getElementById("cart-items-list");
+    const countEl=document.getElementById("cart-count");
+    const totalRow=document.getElementById("cart-total-row");
+    const totalEl=document.getElementById("cart-grand-total");
+    const btn=document.getElementById("btn2-continue");
+    countEl.textContent=cart.length;
+    if(cart.length===0){
+      list.innerHTML=`<div class="cart-empty">No items yet.</div>`;
+      totalRow.style.display="none";
+      btn.disabled=true;
+      return;
+    }
+    let grand=0;
+    list.innerHTML="";
+    cart.forEach((entry,idx)=>{
+      grand+=entry.lineTotal;
+      const addonsText=entry.addons.length?entry.addons.map(a=>a.name).join(", "):"No add-ons";
+      const div=document.createElement("div");
+      div.className="cart-item";
+      div.innerHTML=`
+        <div class="cart-item-info">
+          <div class="cart-item-name">${entry.item.name}${entry.qty>1?" x"+entry.qty:""}</div>
+          <div class="cart-item-addons">${addonsText}</div>
+        </div>
+        <div class="cart-item-right">
+          <span class="cart-item-price">&#8369;${entry.lineTotal.toFixed(2)}</span>
+          <button class="cart-remove" onclick="removeFromCart(${idx})" title="Remove">&#215;</button>
+        </div>`;
+      list.appendChild(div);
+    });
+    totalRow.style.display="flex";
+    totalEl.textContent="&#8369;"+grand.toFixed(2);
+    btn.disabled=false;
+  }
+  
+  /* ── Render: Current item summary (step 2) ── */
+  function renderCurrentItemSummary(){
+    const box=document.getElementById("current-item-summary");
+    if(!box||!selectedItem){if(box)box.innerHTML="";return;}
+    const addOns=selectedAddons.map(id=>ADDONS.find(x=>x.id===id)).filter(Boolean);
+    const lineTotal=(selectedItem.price*selectedQty)+addOns.reduce((s,a)=>s+a.price,0);
+    let html=`<div class="sum-row"><span>${selectedItem.name}${selectedQty>1?" x"+selectedQty:""}</span><span>&#8369;${(selectedItem.price*selectedQty).toFixed(2)}</span></div>`;
+    addOns.forEach(a=>{html+=`<div class="sum-row"><span>${a.name}</span><span>+&#8369;${a.price.toFixed(2)}</span></div>`;});
+    html+=`<div class="sum-total"><span>This item</span><span>&#8369;${lineTotal.toFixed(2)}</span></div>`;
+    box.innerHTML=html;
+  }
+  
+  /* ── Render: Payment summary (step 4) ── */
+  function renderPaymentSummary(){
+    const box=document.getElementById("payment-summary");
+    if(!box)return;
+    const grand=cart.reduce((s,e)=>s+e.lineTotal,0);
+    let html="";
+    cart.forEach(e=>{html+=`<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}</span><span>&#8369;${e.lineTotal.toFixed(2)}</span></div>`;});
+    html+=`<div class="sum-total"><span>Grand total</span><span>&#8369;${grand.toFixed(2)}</span></div>`;
+    box.innerHTML=html;
+  }
+  
+  /* ── Actions ── */
+  function selectItem(it){
+    selectedItem=it; selectedQty=1;
+    document.getElementById("btn1").disabled=false;
+    buildItems();
+  }
+  
+  function selectFeaturedItem(id){
+    const item=ITEMS.find(x=>x.id===id);
+    if(!item)return;
+    selectItem(item);
+    buildItems(); buildWeeklyBest();
+  }
+  
+  function changeQty(change){
+    selectedQty=Math.max(1,selectedQty+change);
+    buildItems();
+  }
+  
+  function toggleAddon(id){
+    const idx=selectedAddons.indexOf(id);
+    if(idx>-1)selectedAddons.splice(idx,1); else selectedAddons.push(id);
+    buildAddons(); renderCurrentItemSummary();
+  }
+  
+  function addToCart(){
+    if(!selectedItem)return;
+    const addOns=selectedAddons.map(id=>ADDONS.find(x=>x.id===id)).filter(Boolean);
+    const lineTotal=(selectedItem.price*selectedQty)+addOns.reduce((s,a)=>s+a.price,0);
+    cart.push({item:selectedItem,qty:selectedQty,addons:addOns,lineTotal});
+    selectedItem=null; selectedAddons=[]; selectedQty=1;
+    buildCart(); buildAddons();
+    document.getElementById("current-item-summary").innerHTML="";
+    buildItems();
+  }
+  
+  function addAnotherItem(){
+    selectedItem=null; selectedAddons=[]; selectedQty=1;
+    buildItems(); buildAddons();
+    document.getElementById("current-item-summary").innerHTML="";
+    goStep(1);
+  }
+  
+  function removeFromCart(idx){
+    cart.splice(idx,1);
+    buildCart();
+  }
+  
+  function selectOffice(o){
+    selectedOffice=o;
+    document.querySelectorAll(".office-btn").forEach(b=>b.classList.remove("selected"));
+    document.getElementById(o==="Camerino"?"off-cam":"off-gue").classList.add("selected");
+    document.getElementById("err-office").style.display="none";
+  }
+  
+  function selectDate(d){
+    selectedDate=d;
+    buildDates();
+    document.getElementById("err-date").style.display="none";
+  }
+  
+  function selectPayment(p){
+    selectedPayment=p;
+    document.querySelectorAll(".pay-btn").forEach(b=>b.classList.remove("selected"));
+    const map={"GCash":"pay-gcash","Cash":"pay-cash","Sa Sahod na Boss Oma":"pay-sahod"};
+    document.getElementById(map[p]).classList.add("selected");
+    document.getElementById("gcash-details").className="gcash-details"+(p==="GCash"?" show":"");
+    document.getElementById("err-payment").style.display="none";
+    renderPaymentSummary();
+  }
+  
+  function clearErr(errId,inputId){
+    document.getElementById(errId).style.display="none";
+    if(inputId)document.getElementById(inputId).classList.remove("error");
+  }
+  
+  /* ── Navigation ── */
+  function goStep(n){
+    document.getElementById("step"+currentStep).classList.remove("active");
+    document.getElementById("step"+n).classList.add("active");
+    for(let i=1;i<=5;i++){
+      document.getElementById("pl"+i).className="prog-lbl"+(i<n?" done":i===n?" active":"");
+      document.getElementById("ps"+i).className="prog-seg"+(i<n?" done":i===n?" active":"");
+    }
+    if(n===2){buildAddons();renderCurrentItemSummary();buildCart();}
+    if(n===3){buildDates();}
+    if(n===4){renderPaymentSummary();}
+    currentStep=n;
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  
+  function goToPayment(){
+    let valid=true;
+    const name=document.getElementById("f-name").value.trim();
+    if(!name){document.getElementById("err-name").style.display="block";document.getElementById("f-name").classList.add("error");valid=false;}
+    if(!selectedOffice){document.getElementById("err-office").style.display="block";valid=false;}
+    if(!selectedDate){document.getElementById("err-date").style.display="block";valid=false;}
+    if(valid)goStep(4);
+  }
+  
+  /* ── Submit ── */
+  function submitOrder(){
+    if(!selectedPayment){document.getElementById("err-payment").style.display="block";return;}
+    const name=document.getElementById("f-name").value.trim();
+    const grand=cart.reduce((s,e)=>s+e.lineTotal,0);
+    const order={
+      timestamp:new Date().toLocaleString("en-PH"),
+      name, office:selectedOffice, pickup_date:selectedDate, payment:selectedPayment,
+      items:cart.map(e=>`${e.item.name}${e.qty>1?" x"+e.qty:""}${e.addons.length?" ("+e.addons.map(a=>a.name).join(", ")+")":""}`).join(" | "),
+      total:grand
+    };
+    fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)}).catch(()=>{});
+  
+    document.getElementById("confirm-msg").textContent=`Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
+    let itemsHtml="";
+    cart.forEach(e=>{
+      const addonsText=e.addons.length?" + "+e.addons.map(a=>a.name).join(", "):"";
+      itemsHtml+=`<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}${addonsText}</span><span>&#8369;${e.lineTotal.toFixed(2)}</span></div>`;
+    });
+    document.getElementById("confirm-summary").innerHTML=`
+      <div class="sum-row"><span>Name</span><span>${name}</span></div>
+      <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
+      <div class="sum-row"><span>Pickup date</span><span>${selectedDate}</span></div>
+      <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
+      <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">${itemsHtml}</div>
+      <div class="sum-total"><span>Grand total</span><span>&#8369;${grand.toFixed(2)}</span></div>`;
+    goStep(5);
+  }
+  
+  /* ── Reset ── */
+  function resetApp(){
+    selectedItem=null;selectedAddons=[];selectedQty=1;
+    cart=[];selectedOffice="";selectedDate="";selectedPayment="";
+    document.getElementById("f-name").value="";
+    document.querySelectorAll(".office-btn,.pay-btn").forEach(b=>b.classList.remove("selected"));
+    document.getElementById("gcash-details").className="gcash-details";
+    document.getElementById("btn1").disabled=true;
+    currentStep=1; goStep(1);
+    buildItems(); buildWeeklyBest();
+  }
+  
   buildItems();
   buildWeeklyBest();
-}
-
-function buildAddons(){
-  const g = document.getElementById("addon-grid");
-  g.innerHTML = "";
-  ADDONS.forEach(a => {
-    const sel = selectedAddons.includes(a.id);
-    const d = document.createElement("div");
-    d.className = "addon-card" + (sel ? " selected" : "");
-    d.id = "addon-" + a.id;
-    d.innerHTML = `
-      <div class="addon-check">
-        <svg class="checksvg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 5 4 8 9 2"/></svg>
-      </div>
-      <div>
-        <div class="addon-name">${a.name}</div>
-        <div class="addon-price">+₱${a.price.toFixed(2)}</div>
-      </div>`;
-    d.onclick = () => toggleAddon(a.id);
-    g.appendChild(d);
-  });
-}
-
-function selectItem(it){
-  selectedItem = it;
-  selectedQty = 1;
-  document.getElementById("btn1").disabled = false;
-
-  buildItems();
-  renderSummaryMini();
-}
-
-function changeQty(change){
-  selectedQty += change;
-  if (selectedQty < 1) selectedQty = 1;
-
-  buildItems();
-  renderSummaryMini();
-}
-
-function toggleAddon(id){
-  const idx = selectedAddons.indexOf(id);
-  if(idx > -1) selectedAddons.splice(idx, 1);
-  else selectedAddons.push(id);
-  buildAddons();
-  renderSummaryMini();
-}
-
-function selectOffice(o){
-  selectedOffice = o;
-  document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
-  document.getElementById(o === "Camerino" ? "off-cam" : "off-gue").classList.add("selected");
-  document.getElementById("err-office").style.display = "none";
-  renderSummaryFull();
-}
-
-function clearErr(errId, inputId){
-  document.getElementById(errId).style.display = "none";
-  document.getElementById(inputId).classList.remove("error");
-}
-
-function calcTotal(){
-  let t = selectedItem ? selectedItem.price * selectedQty : 0;
-
-  selectedAddons.forEach(id => {
-    const a = ADDONS.find(x => x.id === id);
-    if(a) t += a.price;
-  });
-
-  return t;
-}
-
-function getAddonsArr(){
-  return selectedAddons.map(id => ADDONS.find(x => x.id === id)).filter(Boolean);
-}
-
-function renderSummaryMini(){
-  const box = document.getElementById("summary-mini");
-  if(!box) return;
-  const addOns = getAddonsArr();
-  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"}${selectedItem && selectedQty > 1 ? " x"+selectedQty : ""} — ₱${selectedItem ? (selectedItem.price * selectedQty).toFixed(2) : "0.00"}</span></div>`;
-  addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+₱${a.price.toFixed(2)}</span></div>`; });
-  html += `<div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
-  box.innerHTML = html;
-}
-
-function renderSummaryFull(){
-  const box = document.getElementById("summary-full");
-  const addOns = getAddonsArr();
-  let html = `<div class="sum-row"><span>Item</span><span>${selectedItem ? selectedItem.name : "-"} — ₱${selectedItem ? selectedItem.price.toFixed(2) : "0.00"}</span></div>`;
-  addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+₱${a.price.toFixed(2)}</span></div>`; });
-  html += `<div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
-  box.innerHTML = html;
-}
-
-function goStep(n){
-  document.getElementById("step" + currentStep).classList.remove("active");
-  document.getElementById("step" + n).classList.add("active");
-  const labels = ["pl1","pl2","pl3","pl4"];
-  const segs = ["ps1","ps2","ps3","ps4"];
-  labels.forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.className = "prog-lbl" + (i+1 < n ? " done" : i+1 === n ? " active" : "");
-  });
-  segs.forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.className = "prog-seg" + (i+1 < n ? " done" : i+1 === n ? " active" : "");
-  });
-  if(n === 2){ buildAddons(); renderSummaryMini(); }
-  if(n === 3){ renderSummaryFull(); }
-  currentStep = n;
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function submitOrder(){
-  let valid = true;
-  const name = document.getElementById("f-name").value.trim();
-  if(!name){
-    document.getElementById("err-name").style.display = "block";
-    document.getElementById("f-name").classList.add("error");
-    valid = false;
-  }
-  if(!selectedOffice){
-    document.getElementById("err-office").style.display = "block";
-    valid = false;
-  }
-  if(!valid) return;
-
-  const addOns = getAddonsArr();
-  const order = {
-    timestamp: new Date().toLocaleString("en-PH"),
-    name,
-    office: selectedOffice,
-    item: selectedItem.name,
-    quantity: selectedQty,
-    item_price: selectedItem.price * selectedQty,
-    addons: addOns.map(a => a.name).join(", ") || "None",
-    addons_price: addOns.reduce((s, a) => s + a.price, 0),
-    total: calcTotal()
-  };
-
-  fetch("/api/order", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(order)
-  })
-  .then(async (res) => {
-    const text = await res.text();
-    console.log("API response:", text);
-  })
-  .catch((err) => {
-    console.error("Fetch failed:", err);
-  });
-
-  document.getElementById("confirm-msg").textContent =
-    `Thank you, ${name}! Your order will be ready at the ${selectedOffice} office.`;
-
-  const addOnsLine = addOns.length
-    ? `<div class="sum-row"><span>Add-ons</span><span>${addOns.map(a => a.name).join(", ")}</span></div>` : "";
-
-  document.getElementById("confirm-summary").innerHTML = `
-    <div class="sum-row"><span>Name</span><span>${name}</span></div>
-    <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
-    <div class="sum-row"><span>Item</span><span>${selectedItem.name}</span></div>
-    ${addOnsLine}
-    <div class="sum-total"><span>Total</span><span>₱${calcTotal().toFixed(2)}</span></div>`;
-
-  goStep(4);
-}
-
-function resetApp(){
-  selectedItem = null;
-  selectedAddons = [];
-  selectedOffice = "";
-
-  selectedQty = 1; //
-  const qtyEl = document.getElementById("qty-value");
-  if (qtyEl) qtyEl.textContent = "1";
-
-  document.getElementById("f-name").value = "";
-  document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
-  document.getElementById("btn1").disabled = true;
-  goStep(1);
-  buildItems();
-  buildWeeklyBest(); //
-}
-
-buildItems();
-buildWeeklyBest();
-</script>
+  </script>
 </body>
 </html>
