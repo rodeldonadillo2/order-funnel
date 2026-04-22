@@ -996,7 +996,7 @@ function submitOrder() {
 
   const order = { name, office: selectedOffice, item: itemNames, itemPrice: itemPrices, addons: addonsText, addonsPrice: addonsPrices, total: grand, quantity: totalQty, payment: selectedPayment, orderNumber: orderNum };
 
-  fetch("https://script.google.com/macros/s/AKfycbyk81wvYcFUzWKwDDRyRVtQ3IgofuIeEidqQbjf2YKDHhWi2gKxKq7FiakNQqNDiB4MzA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbym6wPRI4s5gQpOk1LwfIOGoqDPdz4qzko8wqit_c7ELXux2VPXp6MDry5EtcOPBa6PEQ/exec", {
     method: "POST",
     headers: {"Content-Type":"text/plain"},
     body: JSON.stringify(order)
