@@ -1,739 +1,1414 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Order Form</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
-<style>
-  :root{
-  --bg:#23242d;
-  --card:#31323d;
-  --card-2:#3a3c48;
-  --text:#f5f1e8;
-  --text2:#d4cfbf;
-  --text3:#a7a39a;
-  --accent:#f0d98a;
-  --accent-2:#f5c95a;
-  --border:rgba(255,255,255,0.08);
-  --border2:rgba(255,255,255,0.18);
-  --shadow:0 10px 30px rgba(0,0,0,0.25);
-  --radius:22px;
-  --radius-sm:14px;
-  --purple:#f0d98a;
-  --teal:#1D9E75;
-  --teal-light:rgba(29,158,117,0.15);
-  --red:#f87171;
-}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:24px 16px 60px;
-}
-  .brand{font-family:'DM Serif Display',serif;font-size:26px;color:var(--purple);letter-spacing:-0.5px;margin-bottom:6px;text-align:center}
-  .brand-sub{font-size:13px;color:var(--text3);text-align:center;margin-bottom:28px}
-
-  .gs-banner{width:100%;max-width:560px;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:var(--radius);padding:14px 16px;margin-bottom:20px}
-  .gs-banner strong{font-size:13px;color:#0C447C;display:block;margin-bottom:4px}
-  .gs-banner p{font-size:12px;color:#185FA5;margin-bottom:8px}
-  .gs-input{width:100%;padding:8px 12px;border:0.5px solid #85B7EB;border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text)}
-  .gs-input:focus{outline:none;border-color:#185FA5}
-
-  .card{
-  width:100%;
-  max-width:560px;
-  background:transparent;
-  border-radius:var(--radius);
-  border:none;
-  padding:0;
-}
-
-  .prog-wrap{margin-bottom:20px}
-  .prog-labels{display:flex;justify-content:space-between;margin-bottom:6px}
-  .prog-lbl{font-size:11px;color:var(--text3);flex:1;text-align:center}
-  .prog-lbl.active{color:var(--purple);font-weight:500}
-  .prog-lbl.done{color:var(--teal)}
-  .prog-bar{display:flex;gap:6px}
-  .prog-seg{flex:1;height:4px;border-radius:2px;background:var(--border)}
-  .prog-seg.done{background:var(--teal)}
-  .prog-seg.active{background:var(--purple)}
-
-  .step{
-  display:none;
-}
-
-.step.active{
-  display:block;
-}
-
-  .step-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
-  .step-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
-
-  .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;margin-bottom:20px}
-  .item-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;background:var(--card);transition:border-color 0.15s,transform 0.1s}
-  .item-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-  .item-card.selected{
-  border:2px solid #f0d98a;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  box-shadow:0 0 0 2px rgba(240,217,138,0.25), 0 10px 30px rgba(0,0,0,0.35);
-  transform:translateY(-4px);
-}
-  .item-img{width:100%;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:10px;overflow:hidden}
-  .item-img img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)}
-  .item-name{font-size:13px;font-weight:600;color:var(--text)}
-  .item-desc{font-size:11px;color:var(--text3);margin-top:2px}
-  .item-price{font-size:13px;color:var(--purple);font-weight:500;margin-top:4px}
-
-  .addon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-  .addon-card{border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;cursor:pointer;background:var(--card);display:flex;align-items:center;gap:10px;transition:border-color 0.1s}
-  .addon-card:hover{border-color:var(--border2)}
-  .addon-card.selected{border:2px solid var(--teal);background:var(--teal-light)}
-  .addon-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}
-  .addon-card.selected .addon-check{background:var(--teal);border-color:var(--teal)}
-  .checksvg{display:none}
-  .addon-card.selected .checksvg{display:block}
-  .addon-name{font-size:13px;font-weight:500;color:var(--text)}
-  .addon-price{font-size:12px;color:var(--teal);margin-top:1px}
-  .addon-skip{font-size:12px;color:var(--text3);text-align:center;margin-bottom:12px}
-
-  .summary-box{background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px}
-  .sum-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--text2)}
-  .sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:600;color:var(--text);border-top:0.5px solid var(--border);margin-top:8px;padding-top:8px}
-
-  .office-opts{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.office-btn{
-  padding:14px 12px;
-  border:2px solid transparent;
-  border-radius:16px;
-  cursor:pointer;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  font-size:14px;
-  font-family:'DM Sans',sans-serif;
-  color:#ffffff;
-  text-align:center;
-  transition:border-color 0.15s, transform 0.1s, box-shadow 0.15s;
-}
-
-.office-btn.selected{
-  border:2px solid #f0d98a;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  color:#ffffff;
-  font-weight:700;
-}
-
-  .err-msg{color:var(--red);font-size:12px;margin-top:5px;display:none}
-
-  .btn-primary{
-  width:100%;
-  padding:14px;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  color:#fff;
-  border:none;
-  border-radius:16px;
-  font-size:15px;
-  font-weight:700;
-  font-family:'DM Sans',sans-serif;
-  cursor:pointer;
-  transition:transform 0.1s, box-shadow 0.15s;
-  margin-top:8px;
-  display:block;
-}
-
-.btn-primary:hover{
-  transform:translateY(-1px);
-  box-shadow:0 10px 22px rgba(0,0,0,0.25);
-}
-
-.btn-primary:active{
-  transform:scale(0.99);
-}
-
-.btn-primary:disabled{
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  color:#fff;
-  opacity:0.6;
-  cursor:not-allowed;
-  box-shadow:none;
-}
-  .btn-back{
-  background:none;
-  border:none;
-  color:var(--text2);
-  font-size:13px;
-  font-family:'DM Sans',sans-serif;
-  cursor:pointer;
-  padding:0;
-  margin-bottom:18px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-}
-
-.btn-back:hover{
-  color:var(--text);
-}
-
-.btn-back svg{
-  width:16px;
-  height:16px;
-  flex-shrink:0;
-  display:block;
-}
-
-  .confirm-wrap{text-align:center;padding:12px 0}
-  .confirm-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-  .confirm-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:6px}
-  .confirm-sub{font-size:14px;color:var(--text3);margin-bottom:20px}
-  .hero-wrap{
-  margin-bottom:20px;
-}
-
-.hero-kicker{
-  color:#f0d98a;
-  font-size:14px;
-  font-weight:700;
-  margin-bottom:8px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-}
-
-.hero-title{
-  font-size:38px;
-  line-height:1.05;
-  font-weight:700;
-  margin-bottom:10px;
-  color:var(--text);
-}
-
-.hero-sub{
-  color:var(--text2);
-  font-size:15px;
-  margin-bottom:8px;
-}
-
-.section-title{
-  font-size:16px;
-  font-weight:700;
-  color:#f0d98a;
-  margin:24px 0 14px;
-}
-
-.weekly-card{
-  background:linear-gradient(135deg,#3a3c48,#2f3039);
-  border-radius:24px;
-  padding:18px;
-  margin-bottom:18px;
-  color:#fff;
-}
-
-.weekly-badge{
-  display:inline-block;
-  background:#f0d98a;
-  color:#1f2027;
-  font-size:12px;
-  font-weight:700;
-  padding:7px 12px;
-  border-radius:999px;
-  margin-bottom:14px;
-}
-
-.weekly-content{
-  display:flex;
-  align-items:center;
-  gap:16px;
-}
-
-.weekly-text{
-  flex:1;
-}
-
-.weekly-text h3{
-  font-size:28px;
-  margin-bottom:8px;
-}
-
-.weekly-text p{
-  font-size:14px;
-  color:#ddd6c8;
-  margin-bottom:12px;
-  line-height:1.45;
-}
-
-.weekly-price{
-  font-size:26px;
-  font-weight:700;
-  color:#f0d98a;
-  margin-bottom:14px;
-}
-
-.weekly-image{
-  flex-shrink:0;
-  width:170px;
-}
-
-.weekly-image img{
-  width:100%;
-  height:auto;
-  object-fit:contain;
-  display:block;
-}
-
-.weekly-select-btn{
-  margin-top:10px;
-  border:none;
-  background:#f0d98a;
-  color:#1f2027;
-  font-weight:700;
-  padding:12px 16px;
-  border-radius:14px;
-  cursor:pointer;
-}
-
-.item-badge{
-  display:inline-block;
-  background:#f0d98a;
-  color:#1f2027;
-  font-size:11px;
-  font-weight:700;
-  padding:6px 10px;
-  border-radius:999px;
-  margin-bottom:10px;
-}
-
-.qty-wrap{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:10px;
-}
-
-.qty-btn{
-  width:36px;
-  height:36px;
-  border:none;
-  border-radius:12px;
-  background:#1f2027;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-}
-.selected-badge{
-  position:absolute;
-  top:12px;
-  right:12px;
-  background:#f0d98a;
-  color:#1f2027;
-  font-size:11px;
-  font-weight:700;
-  padding:6px 10px;
-  border-radius:999px;
-  display:none;
-}
-.item-card.selected .item-img{
-  background:#000;
-}
-
-.item-card.selected img{
-  transform:scale(1.05);
-  transition:0.2s ease;
-}
-.item-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 8px 25px rgba(0,0,0,0.25);
-}
-.item-card .qty-wrap{
-  justify-content:flex-start;
-}
-
-.item-card .qty-value{
-  min-width:24px;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  color:#fff;
-}
-.item-card.selected{
-  border:2px solid #f0d98a;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  box-shadow:0 0 0 2px rgba(240,217,138,0.25), 0 10px 30px rgba(0,0,0,0.35);
-  transform:translateY(-4px);
-}
-.field-input{
-  width:100%;
-  padding:10px 14px;
-  border:0.5px solid var(--border2);
-  border-radius:16px;
-  font-size:14px;
-  font-family:'DM Sans',sans-serif;
-  background:#fff;
-  color:#111;
-  transition:border-color 0.15s;
-}
-
-.field-input::placeholder{
-  color:#888;
-}
-#qty-value{
-  min-width:24px;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  color:#fff;
-}
-
-.payment-qr-box{
-  width:170px;
-  height:170px;
-  border-radius:18px;
-  background:linear-gradient(135deg, #3a3c48, #2f3039);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  margin:0 auto 16px;
-}
-
-.payment-qr-img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-
-@media(max-width:420px){
-    .item-grid{grid-template-columns:1fr 1fr}
-    .addon-grid{grid-template-columns:1fr}
-    .date-grid{grid-template-columns:repeat(3,1fr)}
-  }
-
-  /* Cart */
-  .cart-section{background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px}
-  .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .cart-title{font-size:13px;font-weight:600;color:var(--text)}
-  .cart-count{font-size:11px;background:var(--purple);color:#1f2027;padding:2px 8px;border-radius:10px;font-weight:700}
-  .cart-item{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--border)}
-  .cart-item:last-child{border-bottom:none}
-  .cart-item-info{flex:1}
-  .cart-item-name{font-size:13px;font-weight:500;color:var(--text)}
-  .cart-item-addons{font-size:11px;color:var(--text3);margin-top:2px}
-  .cart-item-right{display:flex;align-items:center;gap:8px}
-  .cart-item-price{font-size:13px;color:var(--purple);font-weight:500}
-  .cart-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0;line-height:1}
-  .cart-remove:hover{color:var(--red)}
-  .cart-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--text);border-top:0.5px solid var(--border2);margin-top:10px;padding-top:10px}
-  .cart-empty{font-size:13px;color:var(--text3);text-align:center;padding:8px 0}
-  .btn-add-cart{width:100%;padding:14px;background:linear-gradient(135deg,#f0d98a,#e8c96a);color:#1f2027;border:none;border-radius:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:transform 0.1s,box-shadow 0.15s;margin-bottom:10px;display:block}
-  .btn-add-cart:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(240,217,138,0.3)}
-  .btn-add-cart:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
-  .btn-add-more{width:100%;padding:12px;background:transparent;color:var(--text2);border:0.5px solid var(--border2);border-radius:16px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:10px;display:block}
-  .btn-add-more:hover{background:var(--card)}
-
-  /* Date picker */
-  .date-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:8px}
-  .date-btn{padding:10px 8px;border:0.5px solid var(--border2);border-radius:12px;cursor:pointer;background:var(--card);font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);text-align:center;transition:border-color 0.15s}
-  .date-btn:hover{border-color:var(--accent)}
-  .date-btn.selected{border:2px solid #f0d98a;background:linear-gradient(135deg,#3a3c48,#2f3039);color:#f0d98a;font-weight:600}
-  .date-day{font-size:10px;color:var(--text3);margin-bottom:2px}
-  .date-btn.selected .date-day{color:var(--text3)}
-  .date-date{font-size:13px;font-weight:600}
-
-  /* Payment */
-  .pay-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-  .pay-btn{padding:14px 16px;border:0.5px solid var(--border2);border-radius:16px;cursor:pointer;background:var(--card);display:flex;align-items:center;gap:14px;transition:border-color 0.15s;text-align:left;width:100%;font-family:'DM Sans',sans-serif}
-  .pay-btn:hover{background:var(--card-2)}
-  .pay-btn.selected{border:2px solid #f0d98a;background:linear-gradient(135deg,#3a3c48,#2f3039)}
-  .pay-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-  .pay-info{flex:1}
-  .pay-name{font-size:14px;font-weight:600;color:var(--text)}
-  .pay-desc{font-size:12px;color:var(--text3);margin-top:2px}
-  .gcash-details{background:var(--bg);border-radius:var(--radius-sm);padding:16px;margin-bottom:4px;display:none;text-align:center}
-  .gcash-details.show{display:block}
-  .gcash-qr{width:150px;height:150px;background:var(--border);border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .gcash-qr img{width:100%;height:100%;object-fit:cover}
-  .gcash-num{font-size:20px;font-weight:700;color:#f0d98a;margin-bottom:4px;letter-spacing:0.05em}
-  .gcash-name{font-size:13px;color:var(--text2)}
-
-  /* Modal overlay */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
-.modal-overlay.show{opacity:1;pointer-events:all}
-.modal-sheet{background:#2a2b35;border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:560px;transform:translateY(40px);transition:transform 0.25s;max-height:85vh;overflow-y:auto}
-.modal-overlay.show .modal-sheet{transform:translateY(0)}
-.modal-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.2);margin:0 auto 20px}
-.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
-.modal-sub{font-size:13px;color:var(--text3);margin-bottom:18px}
-
-/* Receipt */
-.receipt{background:#fff;border-radius:16px;padding:20px;color:#111;font-family:'DM Sans',sans-serif;margin-top:16px}
-.receipt-header{text-align:center;border-bottom:1px dashed #ddd;padding-bottom:14px;margin-bottom:14px}
-.receipt-brand{font-family:'DM Serif Display',serif;font-size:22px;color:#1f2027;margin-bottom:2px}
-.receipt-sub{font-size:11px;color:#888;margin-bottom:8px}
-.receipt-num{font-size:12px;font-weight:700;color:#444;background:#f5f5f5;padding:4px 10px;border-radius:6px;display:inline-block}
-.receipt-meta{font-size:12px;color:#666;margin-top:8px}
-.receipt-section{border-bottom:1px dashed #ddd;padding-bottom:12px;margin-bottom:12px}
-.receipt-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:#333}
-.receipt-row.addon{font-size:11px;color:#888;padding-left:10px}
-.receipt-total-row{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#111;padding-top:8px}
-.receipt-footer{text-align:center;font-size:11px;color:#aaa;margin-top:12px}
-.btn-print{width:100%;padding:12px;background:#1f2027;color:#f0d98a;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:12px}
-</style>
-</head>
-<body>
-
-<div class="brand">Order Form</div>
-<div class="brand-sub">Select your item and place your order</div>
-
-
-
-<div class="card">
-  <div class="prog-wrap">
-    <div class="prog-labels">
-      <span class="prog-lbl active" id="pl1">Item</span>
-      <span class="prog-lbl" id="pl2">Cart</span>
-      <span class="prog-lbl" id="pl3">Details</span>
-      <span class="prog-lbl" id="pl4">Payment</span>
-      <span class="prog-lbl" id="pl5">Done</span>
-    </div>
-    <div class="prog-bar">
-      <div class="prog-seg active" id="ps1"></div>
-      <div class="prog-seg" id="ps2"></div>
-      <div class="prog-seg" id="ps3"></div>
-      <div class="prog-seg" id="ps4"></div>
-      <div class="prog-seg" id="ps5"></div>
-    </div>
-  </div>
-
-  <!-- Step 1: Item Selection -->
-  <div class="step active" id="step1">
-    <div class="hero-wrap">
-      <p class="hero-kicker">Ned's</p>
-      <h1 class="hero-title">ACS Burgers</h1>
-      <p class="hero-sub">BURGER KA SAKEN!!!.</p>
-    </div>
-  
-    <div id="weekly-best-wrap"></div>
-  
-    <p class="section-title">All Burgers</p>
-    <div class="item-grid" id="item-grid"></div>
-  
-    <button class="btn-primary" id="btn1" disabled onclick="goStep(2)">Continue</button>
-  </div>
-
- <!-- Step 2: Add-ons + Cart -->
- <div class="step" id="step2">
-  <button class="btn-back" onclick="goStep(1)">
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
-    Back
-  </button>
-  <p class="step-title">Add-ons</p>
-  <p class="step-sub">Optional extras for your selected item.</p>
-  <div class="addon-grid" id="addon-grid"></div>
-  <p class="addon-skip">No add-ons? That's fine — just add to cart.</p>
-  <div class="summary-box" id="current-item-summary"></div>
-  <button class="btn-add-cart" id="btn-add-cart" onclick="addToCart()">Add to cart</button>
-  <button class="btn-add-more" onclick="addAnotherItem()">+ Add another item</button>
-  <div class="cart-section">
-    <div class="cart-header">
-      <span class="cart-title">Your cart</span>
-      <span class="cart-count" id="cart-count">0</span>
-    </div>
-    <div id="cart-items-list"><div class="cart-empty">No items yet.</div></div>
-    <div class="cart-total" id="cart-total-row" style="display:none">
-      <span>Total</span><span id="cart-grand-total">₱0.00</span>
-    </div>
-  </div>
-  <button class="btn-primary" id="btn2-continue" disabled onclick="goStep(3)">Continue to details</button>
-</div>
-
-<!-- Step 3: Details -->
-<div class="step" id="step3">
-  <button class="btn-back" onclick="goStep(2)">
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
-    Back
-  </button>
-  <p class="step-title">Your details</p>
-  <p class="step-sub">Almost done — just a couple of details.</p>
-  <div class="field-group">
-    <label class="field-label">Full name<span>*</span></label>
-    <input class="field-input" type="text" id="f-name" placeholder="e.g. Juan dela Cruz" oninput="clearErr('err-name','f-name')"/>
-    <div class="err-msg" id="err-name">Please enter your name.</div>
-  </div>
-  <div class="field-group">
-    <label class="field-label">Office<span>*</span></label>
-    <div class="office-opts">
-      <div class="office-btn" id="off-cam" onclick="selectOffice('Camerino')">Camerino</div>
-      <div class="office-btn" id="off-gue" onclick="selectOffice('Guevarra')">Guevarra</div>
-    </div>
-    <div class="err-msg" id="err-office">Please select an office.</div>
-  </div>
-  <div class="field-group">
-    <label class="field-label">Pickup / Delivery date<span>*</span></label>
-    <div class="date-grid" id="date-grid"></div>
-    <div class="err-msg" id="err-date">Please select a date.</div>
-  </div>
-  <button class="btn-primary" onclick="goToPayment()">Continue to payment</button>
-</div>
-
-<!-- Step 4: Payment -->
-<div class="step" id="step4">
-  <button class="btn-back" onclick="goStep(3)">
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L4 7l5 5"/></svg>
-    Back
-  </button>
-  <p class="step-title">Payment method</p>
-  <p class="step-sub">How would you like to pay?</p>
-  <div class="pay-opts">
-    <div class="pay-btn" id="pay-gcash" onclick="selectPayment('GCash')">
-      <div class="pay-icon" style="background:rgba(0,115,255,0.15)">💙</div>
-      <div class="pay-info">
-        <div class="pay-name">GCash</div>
-        <div class="pay-desc">Scan QR or send to number</div>
-      </div>
-    </div>
-    <div class="gcash-details" id="gcash-details">
-      <div class="gcash-qr">
-        <img src="/images/payment-qr.jpg" alt="GoTyme / GCash QR">
-      </div>
-      <!-- Replace the number and name below with your actual GCash details -->
-      <div class="gcash-num">09683576159</div>
-      <div class="gcash-name">Rodel Donadillo</div>
-    </div>
-    <div class="pay-btn" id="pay-cash" onclick="selectPayment('Cash')">
-      <div class="pay-icon" style="background:rgba(29,158,117,0.15)">💵</div>
-      <div class="pay-info">
-        <div class="pay-name">Cash</div>
-        <div class="pay-desc">Pay upon pickup</div>
-      </div>
-    </div>
-    <div class="pay-btn" id="pay-sahod" onclick="selectPayment('Sa Sahod na Boss Oma')">
-      <div class="pay-icon" style="background:rgba(240,217,138,0.15)">😅</div>
-      <div class="pay-info">
-        <div class="pay-name">Sa Sahod na Boss Oma</div>
-        <div class="pay-desc">Pay later — utang muna</div>
-      </div>
-    </div>
-  </div>
-  <div class="err-msg" id="err-payment" style="margin-bottom:8px">Please select a payment method.</div>
-  <div class="summary-box" id="payment-summary"></div>
-  <button class="btn-primary" onclick="openReviewModal()">Place order</button>
-</div>
-
-<!-- Step 5: Confirmation -->
-<div class="step" id="step5">
-  <div class="confirm-wrap">
-    <div class="confirm-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <p class="confirm-title">Order received!</p>
-    <p class="confirm-sub" id="confirm-msg"></p>
-    <div id="receipt-wrap"></div>
-    <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
-  </div>
-</div>
-
-<script>
-  const ITEMS = [
-    {id:1,name:"Jr.",desc:"Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:80,img:"/images/jr.jpg",bestseller:true,weeklyBest:true,popularity:95},
-    {id:2,name:"Eggy",desc:"With Egg + Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:100,img:"/images/eggy.jpg",bestseller:true,weeklyBest:false,popularity:90},
-    {id:3,name:"Jalapeno",desc:"Pure Quarter Pound Beef + Jalapeno + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:100,img:"/images/jalapeno.jpg",bestseller:false,weeklyBest:false,popularity:75},
-    {id:4,name:"DoubleTeam",desc:"Pure Double Quarter Pound Beef + Double Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:115,img:"/images/doubleteam.jpg",bestseller:false,weeklyBest:false,popularity:70},
-    {id:5,name:"Bacon",desc:"Pure Quarter Pound Beef + Bacon + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce",price:115,img:"/images/bacon.jpg",bestseller:false,weeklyBest:false,popularity:65}
-  ];
-  
-  const ADDONS = [
-    {id:1,name:"Extra Mayo",price:10},
-    {id:2,name:"Extra Cheese",price:15},
-    {id:3,name:"Extra Jalapeno",price:15},
-    {id:4,name:"Extra Bacon",price:35}
-  ];
-  
-  /* ── Edit these dates to control what customers can pick ── */
-  const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-// Allowed pickup days: Tuesday (2), Wednesday (3), Friday (5)
-const ALLOWED_DAYS = [2, 3, 5];
-
-// How many upcoming available dates to show
-const MAX_AVAILABLE_DATES = 6;
-
-function getAvailableDates() {
-  const results = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  let cursor = new Date(today);
-
-  while (results.length < MAX_AVAILABLE_DATES) {
-    const day = cursor.getDay();
-
-    if (ALLOWED_DAYS.includes(day)) {
-      results.push({
-        label: DAY_LABELS[day],
-        date: `${MONTH_LABELS[cursor.getMonth()]} ${cursor.getDate()}`,
-        iso: cursor.toISOString().split("T")[0]
-      });
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #23242d;
+      --card: #31323d;
+      --card-2: #3a3c48;
+      --text: #f5f1e8;
+      --text2: #d4cfbf;
+      --text3: #a7a39a;
+      --accent: #f0d98a;
+      --accent-2: #f5c95a;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.18);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --purple: #f0d98a;
+      --teal: #1D9E75;
+      --teal-light: rgba(29, 158, 117, 0.15);
+      --red: #f87171;
     }
 
-    cursor.setDate(cursor.getDate() + 1);
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-  return results;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
 
-const AVAILABLE_DATES = getAvailableDates();
-  
-  /* ── State ── */
-  let selectedItem=null, selectedAddons=[], selectedQty=1;
-  let cart=[], selectedOffice="", selectedDate="", selectedPayment="";
-  let currentStep=1;
-  
-  /* ── Build: Items ── */
-  function buildItems(){
-    const g=document.getElementById("item-grid");
-    g.innerHTML="";
-    [...ITEMS].sort((a,b)=>b.popularity-a.popularity).forEach(it=>{
-      const d=document.createElement("div");
-      d.className="item-card"+(selectedItem&&selectedItem.id===it.id?" selected":"");
-      d.id="item-"+it.id;
-      d.innerHTML=`
-        ${it.bestseller?`<div class="item-badge">Best Seller</div>`:""}
+    .brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: var(--purple);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      text-align: center
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--text3);
+      text-align: center;
+      margin-bottom: 28px
+    }
+
+    .gs-banner {
+      width: 100%;
+      max-width: 560px;
+      background: #E6F1FB;
+      border: 0.5px solid #85B7EB;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 20px
+    }
+
+    .gs-banner strong {
+      font-size: 13px;
+      color: #0C447C;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    .gs-banner p {
+      font-size: 12px;
+      color: #185FA5;
+      margin-bottom: 8px
+    }
+
+    .gs-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 0.5px solid #85B7EB;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: var(--text)
+    }
+
+    .gs-input:focus {
+      outline: none;
+      border-color: #185FA5
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: transparent;
+      border-radius: var(--radius);
+      border: none;
+      padding: 0;
+    }
+
+    .prog-wrap {
+      margin-bottom: 20px
+    }
+
+    .prog-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px
+    }
+
+    .prog-lbl {
+      font-size: 11px;
+      color: var(--text3);
+      flex: 1;
+      text-align: center
+    }
+
+    .prog-lbl.active {
+      color: var(--purple);
+      font-weight: 500
+    }
+
+    .prog-lbl.done {
+      color: var(--teal)
+    }
+
+    .prog-bar {
+      display: flex;
+      gap: 6px
+    }
+
+    .prog-seg {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border)
+    }
+
+    .prog-seg.done {
+      background: var(--teal)
+    }
+
+    .prog-seg.active {
+      background: var(--purple)
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .step-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .step-sub {
+      font-size: 13px;
+      color: var(--text3);
+      margin-bottom: 20px
+    }
+
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px
+    }
+
+    .item-card {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+      cursor: pointer;
+      background: var(--card);
+      transition: border-color 0.15s, transform 0.1s
+    }
+
+    .item-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-1px)
+    }
+
+    .item-card.selected {
+      border: 2px solid #f0d98a;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      box-shadow: 0 0 0 2px rgba(240, 217, 138, 0.25), 0 10px 30px rgba(0, 0, 0, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .item-img {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 10px;
+      overflow: hidden
+    }
+
+    .item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-sm)
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .item-desc {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .item-price {
+      font-size: 13px;
+      color: var(--purple);
+      font-weight: 500;
+      margin-top: 4px
+    }
+
+    .addon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .addon-card {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      cursor: pointer;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.1s
+    }
+
+    .addon-card:hover {
+      border-color: var(--border2)
+    }
+
+    .addon-card.selected {
+      border: 2px solid var(--teal);
+      background: var(--teal-light)
+    }
+
+    .addon-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff
+    }
+
+    .addon-card.selected .addon-check {
+      background: var(--teal);
+      border-color: var(--teal)
+    }
+
+    .checksvg {
+      display: none
+    }
+
+    .addon-card.selected .checksvg {
+      display: block
+    }
+
+    .addon-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text)
+    }
+
+    .addon-price {
+      font-size: 12px;
+      color: var(--teal);
+      margin-top: 1px
+    }
+
+    .addon-skip {
+      font-size: 12px;
+      color: var(--text3);
+      text-align: center;
+      margin-bottom: 12px
+    }
+
+    .summary-box {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 16px
+    }
+
+    .sum-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 3px 0;
+      color: var(--text2)
+    }
+
+    .sum-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      border-top: 0.5px solid var(--border);
+      margin-top: 8px;
+      padding-top: 8px
+    }
+
+    .office-opts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .office-btn {
+      padding: 14px 12px;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: #ffffff;
+      text-align: center;
+      transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+    }
+
+    .office-btn.selected {
+      border: 2px solid #f0d98a;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .err-msg {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 5px;
+      display: none
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+      margin-top: 8px;
+      display: block;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.99);
+    }
+
+    .btn-primary:disabled {
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      color: #fff;
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-back:hover {
+      color: var(--text);
+    }
+
+    .btn-back svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .confirm-wrap {
+      text-align: center;
+      padding: 12px 0
+    }
+
+    .confirm-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px
+    }
+
+    .confirm-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--text);
+      margin-bottom: 6px
+    }
+
+    .confirm-sub {
+      font-size: 14px;
+      color: var(--text3);
+      margin-bottom: 20px
+    }
+
+    .hero-wrap {
+      margin-bottom: 20px;
+    }
+
+    .hero-kicker {
+      color: #f0d98a;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: 38px;
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .hero-sub {
+      color: var(--text2);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0d98a;
+      margin: 24px 0 14px;
+    }
+
+    .weekly-card {
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 18px;
+      color: #fff;
+    }
+
+    .weekly-badge {
+      display: inline-block;
+      background: #f0d98a;
+      color: #1f2027;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .weekly-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .weekly-text {
+      flex: 1;
+    }
+
+    .weekly-text h3 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .weekly-text p {
+      font-size: 14px;
+      color: #ddd6c8;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .weekly-price {
+      font-size: 26px;
+      font-weight: 700;
+      color: #f0d98a;
+      margin-bottom: 14px;
+    }
+
+    .weekly-image {
+      flex-shrink: 0;
+      width: 170px;
+    }
+
+    .weekly-image img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .weekly-select-btn {
+      margin-top: 10px;
+      border: none;
+      background: #f0d98a;
+      color: #1f2027;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .item-badge {
+      display: inline-block;
+      background: #f0d98a;
+      color: #1f2027;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .qty-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 12px;
+      background: #1f2027;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .selected-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #f0d98a;
+      color: #1f2027;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: none;
+    }
+
+    .item-card.selected .item-img {
+      background: #000;
+    }
+
+    .item-card.selected img {
+      transform: scale(1.05);
+      transition: 0.2s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .item-card .qty-wrap {
+      justify-content: flex-start;
+    }
+
+    .item-card .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .item-card.selected {
+      border: 2px solid #f0d98a;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      box-shadow: 0 0 0 2px rgba(240, 217, 138, 0.25), 0 10px 30px rgba(0, 0, 0, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0.5px solid var(--border2);
+      border-radius: 16px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #111;
+      transition: border-color 0.15s;
+    }
+
+    .field-input::placeholder {
+      color: #888;
+    }
+
+    #qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .payment-qr-box {
+      width: 170px;
+      height: 170px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0 auto 16px;
+    }
+
+    .payment-qr-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+
+    @media(max-width:420px) {
+      .item-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .addon-grid {
+        grid-template-columns: 1fr
+      }
+
+      .date-grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    /* Cart */
+    .cart-section {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 14px
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px
+    }
+
+    .cart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .cart-count {
+      font-size: 11px;
+      background: var(--purple);
+      color: #1f2027;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 0.5px solid var(--border)
+    }
+
+    .cart-item:last-child {
+      border-bottom: none
+    }
+
+    .cart-item-info {
+      flex: 1
+    }
+
+    .cart-item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text)
+    }
+
+    .cart-item-addons {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .cart-item-right {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .cart-item-price {
+      font-size: 13px;
+      color: var(--purple);
+      font-weight: 500
+    }
+
+    .cart-remove {
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0;
+      line-height: 1
+    }
+
+    .cart-remove:hover {
+      color: var(--red)
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      border-top: 0.5px solid var(--border2);
+      margin-top: 10px;
+      padding-top: 10px
+    }
+
+    .cart-empty {
+      font-size: 13px;
+      color: var(--text3);
+      text-align: center;
+      padding: 8px 0
+    }
+
+    .btn-add-cart {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #f0d98a, #e8c96a);
+      color: #1f2027;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+      margin-bottom: 10px;
+      display: block
+    }
+
+    .btn-add-cart:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(240, 217, 138, 0.3)
+    }
+
+    .btn-add-cart:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none
+    }
+
+    .btn-add-more {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: var(--text2);
+      border: 0.5px solid var(--border2);
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-bottom: 10px;
+      display: block
+    }
+
+    .btn-add-more:hover {
+      background: var(--card)
+    }
+
+    /* Date picker */
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    .date-btn {
+      padding: 10px 8px;
+      border: 0.5px solid var(--border2);
+      border-radius: 12px;
+      cursor: pointer;
+      background: var(--card);
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      text-align: center;
+      transition: border-color 0.15s
+    }
+
+    .date-btn:hover {
+      border-color: var(--accent)
+    }
+
+    .date-btn.selected {
+      border: 2px solid #f0d98a;
+      background: linear-gradient(135deg, #3a3c48, #2f3039);
+      color: #f0d98a;
+      font-weight: 600
+    }
+
+    .date-day {
+      font-size: 10px;
+      color: var(--text3);
+      margin-bottom: 2px
+    }
+
+    .date-btn.selected .date-day {
+      color: var(--text3)
+    }
+
+    .date-date {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    /* Payment */
+    .pay-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .pay-btn {
+      padding: 14px 16px;
+      border: 0.5px solid var(--border2);
+      border-radius: 16px;
+      cursor: pointer;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s;
+      text-align: left;
+      width: 100%;
+      font-family: 'DM Sans', sans-serif
+    }
+
+    .pay-btn:hover {
+      background: var(--card-2)
+    }
+
+    .pay-btn.selected {
+      border: 2px solid #f0d98a;
+      background: linear-gradient(135deg, #3a3c48, #2f3039)
+    }
+
+    .pay-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0
+    }
+
+    .pay-info {
+      flex: 1
+    }
+
+    .pay-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .pay-desc {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .gcash-details {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 4px;
+      display: none;
+      text-align: center
+    }
+
+    .gcash-details.show {
+      display: block
+    }
+
+    .gcash-qr {
+      width: 150px;
+      height: 150px;
+      background: var(--border);
+      border-radius: 12px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden
+    }
+
+    .gcash-qr img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .gcash-num {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f0d98a;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em
+    }
+
+    .gcash-name {
+      font-size: 13px;
+      color: var(--text2)
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .modal-sheet {
+      background: #2a2b35;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px 36px;
+      width: 100%;
+      max-width: 560px;
+      transform: translateY(40px);
+      transition: transform 0.25s;
+      max-height: 85vh;
+      overflow-y: auto
+    }
+
+    .modal-overlay.show .modal-sheet {
+      transform: translateY(0)
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 0 auto 20px
+    }
+
+    .modal-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .modal-sub {
+      font-size: 13px;
+      color: var(--text3);
+      margin-bottom: 18px
+    }
+
+    /* Receipt */
+    .receipt {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      color: #111;
+      font-family: 'DM Sans', sans-serif;
+      margin-top: 16px
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 1px dashed #ddd;
+      padding-bottom: 14px;
+      margin-bottom: 14px
+    }
+
+    .receipt-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #1f2027;
+      margin-bottom: 2px
+    }
+
+    .receipt-sub {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 8px
+    }
+
+    .receipt-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #444;
+      background: #f5f5f5;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block
+    }
+
+    .receipt-meta {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px
+    }
+
+    .receipt-section {
+      border-bottom: 1px dashed #ddd;
+      padding-bottom: 12px;
+      margin-bottom: 12px
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 3px 0;
+      color: #333
+    }
+
+    .receipt-row.addon {
+      font-size: 11px;
+      color: #888;
+      padding-left: 10px
+    }
+
+    .receipt-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      padding-top: 8px
+    }
+
+    .receipt-footer {
+      text-align: center;
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 12px
+    }
+
+    .btn-print {
+      width: 100%;
+      padding: 12px;
+      background: #1f2027;
+      color: #f0d98a;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-top: 12px
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="brand">Order Form</div>
+  <div class="brand-sub">Select your item and place your order</div>
+
+
+
+  <div class="card">
+    <div class="prog-wrap">
+      <div class="prog-labels">
+        <span class="prog-lbl active" id="pl1">Item</span>
+        <span class="prog-lbl" id="pl2">Cart</span>
+        <span class="prog-lbl" id="pl3">Details</span>
+        <span class="prog-lbl" id="pl4">Payment</span>
+        <span class="prog-lbl" id="pl5">Done</span>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-seg active" id="ps1"></div>
+        <div class="prog-seg" id="ps2"></div>
+        <div class="prog-seg" id="ps3"></div>
+        <div class="prog-seg" id="ps4"></div>
+        <div class="prog-seg" id="ps5"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Item Selection -->
+    <div class="step active" id="step1">
+      <div class="hero-wrap">
+        <p class="hero-kicker">Ned's</p>
+        <h1 class="hero-title">ACS Burgers</h1>
+        <p class="hero-sub">BURGER KA SAKEN!!!.</p>
+      </div>
+
+      <div id="weekly-best-wrap"></div>
+
+      <p class="section-title">All Burgers</p>
+      <div class="item-grid" id="item-grid"></div>
+
+      <button class="btn-primary" id="btn1" disabled onclick="goStep(2)">Continue</button>
+    </div>
+
+    <!-- Step 2: Add-ons + Cart -->
+    <div class="step" id="step2">
+      <button class="btn-back" onclick="goStep(1)">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 2L4 7l5 5" />
+        </svg>
+        Back
+      </button>
+      <p class="step-title">Add-ons</p>
+      <p class="step-sub">Optional extras for your selected item.</p>
+      <div class="addon-grid" id="addon-grid"></div>
+      <p class="addon-skip">No add-ons? That's fine — just add to cart.</p>
+      <div class="summary-box" id="current-item-summary"></div>
+      <button class="btn-add-cart" id="btn-add-cart" onclick="addToCart()">Add to cart</button>
+      <button class="btn-add-more" onclick="addAnotherItem()">+ Add another item</button>
+      <div class="cart-section">
+        <div class="cart-header">
+          <span class="cart-title">Your cart</span>
+          <span class="cart-count" id="cart-count">0</span>
+        </div>
+        <div id="cart-items-list">
+          <div class="cart-empty">No items yet.</div>
+        </div>
+        <div class="cart-total" id="cart-total-row" style="display:none">
+          <span>Total</span><span id="cart-grand-total">₱0.00</span>
+        </div>
+      </div>
+      <button class="btn-primary" id="btn2-continue" disabled onclick="goStep(3)">Continue to details</button>
+    </div>
+
+    <!-- Step 3: Details -->
+    <div class="step" id="step3">
+      <button class="btn-back" onclick="goStep(2)">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 2L4 7l5 5" />
+        </svg>
+        Back
+      </button>
+      <p class="step-title">Your details</p>
+      <p class="step-sub">Almost done — just a couple of details.</p>
+      <div class="field-group">
+        <label class="field-label">Full name<span>*</span></label>
+        <input class="field-input" type="text" id="f-name" placeholder="e.g. Juan dela Cruz"
+          oninput="clearErr('err-name','f-name')" />
+        <div class="err-msg" id="err-name">Please enter your name.</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Office<span>*</span></label>
+        <div class="office-opts">
+          <div class="office-btn" id="off-cam" onclick="selectOffice('Camerino')">Camerino</div>
+          <div class="office-btn" id="off-gue" onclick="selectOffice('Guevarra')">Guevarra</div>
+        </div>
+        <div class="err-msg" id="err-office">Please select an office.</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Pickup / Delivery date<span>*</span></label>
+        <div class="date-grid" id="date-grid"></div>
+        <div class="err-msg" id="err-date">Please select a date.</div>
+      </div>
+      <button class="btn-primary" onclick="goToPayment()">Continue to payment</button>
+    </div>
+
+    <!-- Step 4: Payment -->
+    <div class="step" id="step4">
+      <button class="btn-back" onclick="goStep(3)">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 2L4 7l5 5" />
+        </svg>
+        Back
+      </button>
+      <p class="step-title">Payment method</p>
+      <p class="step-sub">How would you like to pay?</p>
+      <div class="pay-opts">
+        <div class="pay-btn" id="pay-gcash" onclick="selectPayment('GCash')">
+          <div class="pay-icon" style="background:rgba(0,115,255,0.15)">💙</div>
+          <div class="pay-info">
+            <div class="pay-name">GCash</div>
+            <div class="pay-desc">Scan QR or send to number</div>
+          </div>
+        </div>
+        <div class="gcash-details" id="gcash-details">
+          <div class="gcash-qr">
+            <img src="/images/payment-qr.jpg" alt="GoTyme / GCash QR">
+          </div>
+          <!-- Replace the number and name below with your actual GCash details -->
+          <div class="gcash-num">09683576159</div>
+          <div class="gcash-name">Rodel Donadillo</div>
+        </div>
+        <div class="pay-btn" id="pay-cash" onclick="selectPayment('Cash')">
+          <div class="pay-icon" style="background:rgba(29,158,117,0.15)">💵</div>
+          <div class="pay-info">
+            <div class="pay-name">Cash</div>
+            <div class="pay-desc">Pay upon pickup</div>
+          </div>
+        </div>
+        <div class="pay-btn" id="pay-sahod" onclick="selectPayment('Sa Sahod na Boss Oma')">
+          <div class="pay-icon" style="background:rgba(240,217,138,0.15)">😅</div>
+          <div class="pay-info">
+            <div class="pay-name">Sa Sahod na Boss Oma</div>
+            <div class="pay-desc">Pay later — utang muna</div>
+          </div>
+        </div>
+      </div>
+      <div class="err-msg" id="err-payment" style="margin-bottom:8px">Please select a payment method.</div>
+      <div class="summary-box" id="payment-summary"></div>
+      <button class="btn-primary" onclick="openReviewModal()">Place order</button>
+    </div>
+
+    <!-- Step 5: Confirmation -->
+    <div class="step" id="step5">
+      <div class="confirm-wrap">
+        <div class="confirm-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <p class="confirm-title">Order received!</p>
+        <p class="confirm-sub" id="confirm-msg"></p>
+        <div id="receipt-wrap"></div>
+        <button class="btn-primary" style="margin-top:8px" onclick="resetApp()">Place another order</button>
+      </div>
+    </div>
+
+    <script>
+      const ITEMS = [
+        { id: 1, name: "Jr.", desc: "Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce", price: 80, img: "/images/jr.jpg", bestseller: true, weeklyBest: true, popularity: 95 },
+        { id: 2, name: "Eggy", desc: "With Egg + Pure Quarter Pound Beef + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce", price: 100, img: "/images/eggy.jpg", bestseller: true, weeklyBest: false, popularity: 90 },
+        { id: 3, name: "Jalapeno", desc: "Pure Quarter Pound Beef + Jalapeno + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce", price: 100, img: "/images/jalapeno.jpg", bestseller: false, weeklyBest: false, popularity: 75 },
+        { id: 4, name: "DoubleTeam", desc: "Pure Double Quarter Pound Beef + Double Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce", price: 115, img: "/images/doubleteam.jpg", bestseller: false, weeklyBest: false, popularity: 70 },
+        { id: 5, name: "Bacon", desc: "Pure Quarter Pound Beef + Bacon + Cheese + Lettuce + Onion + Tomato + Mayo + BBQ Sauce", price: 115, img: "/images/bacon.jpg", bestseller: false, weeklyBest: false, popularity: 65 }
+      ];
+
+      const ADDONS = [
+        { id: 1, name: "Extra Mayo", price: 10 },
+        { id: 2, name: "Extra Cheese", price: 15 },
+        { id: 3, name: "Extra Jalapeno", price: 15 },
+        { id: 4, name: "Extra Bacon", price: 35 }
+      ];
+
+      /* ── Edit these dates to control what customers can pick ── */
+      const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      // Allowed pickup days: Tuesday (2), Wednesday (3), Friday (5)
+      const ALLOWED_DAYS = [2, 3, 5];
+
+      // How many upcoming available dates to show
+      const MAX_AVAILABLE_DATES = 6;
+
+      function getAvailableDates() {
+        const results = [];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        let cursor = new Date(today);
+
+        while (results.length < MAX_AVAILABLE_DATES) {
+          const day = cursor.getDay();
+
+          if (ALLOWED_DAYS.includes(day)) {
+            results.push({
+              label: DAY_LABELS[day],
+              date: `${MONTH_LABELS[cursor.getMonth()]} ${cursor.getDate()}`,
+              iso: cursor.toISOString().split("T")[0]
+            });
+          }
+
+          cursor.setDate(cursor.getDate() + 1);
+        }
+
+        return results;
+      }
+
+      const AVAILABLE_DATES = getAvailableDates();
+
+      /* ── State ── */
+      let selectedItem = null, selectedAddons = [], selectedQty = 1;
+      let cart = [], selectedOffice = "", selectedDate = "", selectedPayment = "";
+      let currentStep = 1;
+
+      /* ── Build: Items ── */
+      function buildItems() {
+        const g = document.getElementById("item-grid");
+        g.innerHTML = "";
+        [...ITEMS].sort((a, b) => b.popularity - a.popularity).forEach(it => {
+          const d = document.createElement("div");
+          d.className = "item-card" + (selectedItem && selectedItem.id === it.id ? " selected" : "");
+          d.id = "item-" + it.id;
+          d.innerHTML = `
+        ${it.bestseller ? `<div class="item-badge">Best Seller</div>` : ""}
         <div class="item-img"><img src="${it.img}" alt="${it.name}"></div>
         <div class="item-name">${it.name}</div>
         <div class="item-desc">${it.desc}</div>
         <div class="item-price">&#8369;${it.price.toFixed(2)}</div>
-        ${selectedItem&&selectedItem.id===it.id?`
+        ${selectedItem && selectedItem.id === it.id ? `
           <div class="qty-wrap">
             <button type="button" class="qty-btn" onclick="event.stopPropagation();changeQty(-1)">&#8722;</button>
             <span class="qty-value">${selectedQty}</span>
             <button type="button" class="qty-btn" onclick="event.stopPropagation();changeQty(1)">+</button>
-          </div>`:""}`;
-      d.onclick=()=>selectItem(it);
-      g.appendChild(d);
-    });
-  }
-  
-  /* ── Build: Add-ons ── */
-  function buildAddons(){
-    const g=document.getElementById("addon-grid");
-    g.innerHTML="";
-    ADDONS.forEach(a=>{
-      const sel=selectedAddons.includes(a.id);
-      const d=document.createElement("div");
-      d.className="addon-card"+(sel?" selected":"");
-      d.id="addon-"+a.id;
-      d.innerHTML=`
+          </div>`: ""}`;
+          d.onclick = () => selectItem(it);
+          g.appendChild(d);
+        });
+      }
+
+      /* ── Build: Add-ons ── */
+      function buildAddons() {
+        const g = document.getElementById("addon-grid");
+        g.innerHTML = "";
+        ADDONS.forEach(a => {
+          const sel = selectedAddons.includes(a.id);
+          const d = document.createElement("div");
+          d.className = "addon-card" + (sel ? " selected" : "");
+          d.id = "addon-" + a.id;
+          d.innerHTML = `
         <div class="addon-check">
           <svg class="checksvg" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="1 5 4 8 9 2"/></svg>
         </div>
@@ -741,18 +1416,18 @@ const AVAILABLE_DATES = getAvailableDates();
           <div class="addon-name">${a.name}</div>
           <div class="addon-price">+&#8369;${a.price.toFixed(2)}</div>
         </div>`;
-      d.onclick=()=>toggleAddon(a.id);
-      g.appendChild(d);
-    });
-  }
-  
-  /* ── Build: Weekly Best ── */
-  function buildWeeklyBest(){
-    const wrap=document.getElementById("weekly-best-wrap");
-    if(!wrap)return;
-    const item=ITEMS.find(x=>x.weeklyBest);
-    if(!item){wrap.innerHTML="";return;}
-    wrap.innerHTML=`
+          d.onclick = () => toggleAddon(a.id);
+          g.appendChild(d);
+        });
+      }
+
+      /* ── Build: Weekly Best ── */
+      function buildWeeklyBest() {
+        const wrap = document.getElementById("weekly-best-wrap");
+        if (!wrap) return;
+        const item = ITEMS.find(x => x.weeklyBest);
+        if (!item) { wrap.innerHTML = ""; return; }
+        wrap.innerHTML = `
       <div class="weekly-card">
         <div class="weekly-badge">Best Seller This Week</div>
         <div class="weekly-content">
@@ -764,306 +1439,334 @@ const AVAILABLE_DATES = getAvailableDates();
           <div class="weekly-image"><img src="${item.img}" alt="${item.name}"></div>
         </div>
       </div>`;
-  }
-  
-  /* ── Build: Dates ── */
-  function buildDates(){
-    const g=document.getElementById("date-grid");
-    g.innerHTML="";
-    AVAILABLE_DATES.forEach(d=>{
-      const btn=document.createElement("div");
-      btn.className="date-btn"+(selectedDate===d.date?" selected":"");
-      btn.innerHTML=`<div class="date-day">${d.label}</div><div class="date-date">${d.date}</div>`;
-      btn.onclick=()=>selectDate(d.date);
-      g.appendChild(btn);
-    });
-  }
-  
-  /* ── Build: Cart ── */
-  function buildCart(){
-    const list=document.getElementById("cart-items-list");
-    const countEl=document.getElementById("cart-count");
-    const totalRow=document.getElementById("cart-total-row");
-    const totalEl=document.getElementById("cart-grand-total");
-    const btn=document.getElementById("btn2-continue");
-    countEl.textContent=cart.length;
-    if(cart.length===0){
-      list.innerHTML=`<div class="cart-empty">No items yet.</div>`;
-      totalRow.style.display="none";
-      btn.disabled=true;
-      return;
-    }
-    let grand=0;
-    list.innerHTML="";
-    cart.forEach((entry,idx)=>{
-      grand+=entry.lineTotal;
-      const addonsText=entry.addons.length?entry.addons.map(a=>a.name).join(", "):"No add-ons";
-      const div=document.createElement("div");
-      div.className="cart-item";
-      div.innerHTML=`
+      }
+
+      /* ── Build: Dates ── */
+      function buildDates() {
+        const g = document.getElementById("date-grid");
+        g.innerHTML = "";
+        AVAILABLE_DATES.forEach(d => {
+          const btn = document.createElement("div");
+          btn.className = "date-btn" + (selectedDate === d.date ? " selected" : "");
+          btn.innerHTML = `<div class="date-day">${d.label}</div><div class="date-date">${d.date}</div>`;
+          btn.onclick = () => selectDate(d.date);
+          g.appendChild(btn);
+        });
+      }
+
+      /* ── Build: Cart ── */
+      function buildCart() {
+        const list = document.getElementById("cart-items-list");
+        const countEl = document.getElementById("cart-count");
+        const totalRow = document.getElementById("cart-total-row");
+        const totalEl = document.getElementById("cart-grand-total");
+        const btn = document.getElementById("btn2-continue");
+        countEl.textContent = cart.length;
+        if (cart.length === 0) {
+          list.innerHTML = `<div class="cart-empty">No items yet.</div>`;
+          totalRow.style.display = "none";
+          btn.disabled = true;
+          return;
+        }
+        let grand = 0;
+        list.innerHTML = "";
+        cart.forEach((entry, idx) => {
+          grand += entry.lineTotal;
+          const addonsText = entry.addons.length ? entry.addons.map(a => a.name).join(", ") : "No add-ons";
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
         <div class="cart-item-info">
-          <div class="cart-item-name">${entry.item.name}${entry.qty>1?" x"+entry.qty:""}</div>
+          <div class="cart-item-name">${entry.item.name}${entry.qty > 1 ? " x" + entry.qty : ""}</div>
           <div class="cart-item-addons">${addonsText}</div>
         </div>
         <div class="cart-item-right">
           <span class="cart-item-price">&#8369;${entry.lineTotal.toFixed(2)}</span>
           <button class="cart-remove" onclick="removeFromCart(${idx})" title="Remove">&#215;</button>
         </div>`;
-      list.appendChild(div);
-    });
-    totalRow.style.display="flex";
-    totalEl.textContent="₱"+grand.toFixed(2);
-    btn.disabled=false;
-  }
-  
-  /* ── Render: Current item summary (step 2) ── */
-  function renderCurrentItemSummary(){
-    const box=document.getElementById("current-item-summary");
-    if(!box||!selectedItem){if(box)box.innerHTML="";return;}
-    const addOns=selectedAddons.map(id=>ADDONS.find(x=>x.id===id)).filter(Boolean);
-    const lineTotal=(selectedItem.price*selectedQty)+addOns.reduce((s,a)=>s+a.price,0);
-    let html=`<div class="sum-row"><span>${selectedItem.name}${selectedQty>1?" x"+selectedQty:""}</span><span>&#8369;${(selectedItem.price*selectedQty).toFixed(2)}</span></div>`;
-    addOns.forEach(a=>{html+=`<div class="sum-row"><span>${a.name}</span><span>+&#8369;${a.price.toFixed(2)}</span></div>`;});
-    html+=`<div class="sum-total"><span>This item</span><span>&#8369;${lineTotal.toFixed(2)}</span></div>`;
-    box.innerHTML=html;
-  }
-  
-  /* ── Render: Payment summary (step 4) ── */
-  function renderPaymentSummary(){
-    const box=document.getElementById("payment-summary");
-    if(!box)return;
-    const grand=cart.reduce((s,e)=>s+e.lineTotal,0);
-    let html="";
-    cart.forEach(e=>{html+=`<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}</span><span>&#8369;${e.lineTotal.toFixed(2)}</span></div>`;});
-    html+=`<div class="sum-total"><span>Grand total</span><span>&#8369;${grand.toFixed(2)}</span></div>`;
-    box.innerHTML=html;
-  }
-  
-  /* ── Actions ── */
-  function selectItem(it){
-    selectedItem=it; selectedQty=1;
-    document.getElementById("btn1").disabled=false;
-    buildItems();
-  }
-  
-  function selectFeaturedItem(id){
-    const item=ITEMS.find(x=>x.id===id);
-    if(!item)return;
-    selectItem(item);
-    buildItems(); buildWeeklyBest();
-  }
-  
-  function changeQty(change){
-    selectedQty=Math.max(1,selectedQty+change);
-    buildItems();
-  }
-  
-  function toggleAddon(id){
-    const idx=selectedAddons.indexOf(id);
-    if(idx>-1)selectedAddons.splice(idx,1); else selectedAddons.push(id);
-    buildAddons(); renderCurrentItemSummary();
-  }
-  
-  function addToCart(){
-    if(!selectedItem)return;
-    const addOns=selectedAddons.map(id=>ADDONS.find(x=>x.id===id)).filter(Boolean);
-    const lineTotal=(selectedItem.price*selectedQty)+addOns.reduce((s,a)=>s+a.price,0);
-    cart.push({item:selectedItem,qty:selectedQty,addons:addOns,lineTotal});
-    selectedItem=null; selectedAddons=[]; selectedQty=1;
-    buildCart(); buildAddons();
-    document.getElementById("current-item-summary").innerHTML="";
-    buildItems();
-  }
-  
-  function addAnotherItem(){
-    selectedItem=null; selectedAddons=[]; selectedQty=1;
-    buildItems(); buildAddons();
-    document.getElementById("current-item-summary").innerHTML="";
-    goStep(1);
-  }
-  
-  function removeFromCart(idx){
-    cart.splice(idx,1);
-    buildCart();
-  }
-  
-  function selectOffice(o){
-    selectedOffice=o;
-    document.querySelectorAll(".office-btn").forEach(b=>b.classList.remove("selected"));
-    document.getElementById(o==="Camerino"?"off-cam":"off-gue").classList.add("selected");
-    document.getElementById("err-office").style.display="none";
-  }
-  
-  function selectDate(d){
-    selectedDate=d;
-    buildDates();
-    document.getElementById("err-date").style.display="none";
-  }
-  
-  function selectPayment(p){
-    selectedPayment=p;
-    document.querySelectorAll(".pay-btn").forEach(b=>b.classList.remove("selected"));
-    const map={"GCash":"pay-gcash","Cash":"pay-cash","Sa Sahod na Boss Oma":"pay-sahod"};
-    document.getElementById(map[p]).classList.add("selected");
-    document.getElementById("gcash-details").className="gcash-details"+(p==="GCash"?" show":"");
-    document.getElementById("err-payment").style.display="none";
-    renderPaymentSummary();
-  }
-  
-  function clearErr(errId,inputId){
-    document.getElementById(errId).style.display="none";
-    if(inputId)document.getElementById(inputId).classList.remove("error");
-  }
-  
-  /* ── Navigation ── */
-  function goStep(n){
-    document.getElementById("step"+currentStep).classList.remove("active");
-    document.getElementById("step"+n).classList.add("active");
-    for(let i=1;i<=5;i++){
-      document.getElementById("pl"+i).className="prog-lbl"+(i<n?" done":i===n?" active":"");
-      document.getElementById("ps"+i).className="prog-seg"+(i<n?" done":i===n?" active":"");
-    }
-    if(n===2){buildAddons();renderCurrentItemSummary();buildCart();}
-    if(n===3){buildDates();}
-    if(n===4){renderPaymentSummary();}
-    currentStep=n;
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-  
-  function goToPayment(){
-    let valid=true;
-    const name=document.getElementById("f-name").value.trim();
-    if(!name){document.getElementById("err-name").style.display="block";document.getElementById("f-name").classList.add("error");valid=false;}
-    if(!selectedOffice){document.getElementById("err-office").style.display="block";valid=false;}
-    if(!selectedDate){document.getElementById("err-date").style.display="block";valid=false;}
-    if(valid)goStep(4);
-  }
-  
-  /* ── Submit ── */
-  function openReviewModal() {
-  if(!selectedPayment){
-    document.getElementById("err-payment").style.display = "block";
-    return;
-  }
-  const name = document.getElementById("f-name").value.trim();
-  if(!name) return;
-  const grand = cart.reduce((s,e) => s + e.lineTotal, 0);
-  let html = `
+          list.appendChild(div);
+        });
+        totalRow.style.display = "flex";
+        totalEl.textContent = "₱" + grand.toFixed(2);
+        btn.disabled = false;
+      }
+
+      /* ── Render: Current item summary (step 2) ── */
+      function renderCurrentItemSummary() {
+        const box = document.getElementById("current-item-summary");
+        if (!box || !selectedItem) { if (box) box.innerHTML = ""; return; }
+        const addOns = selectedAddons.map(id => ADDONS.find(x => x.id === id)).filter(Boolean);
+        const lineTotal = (selectedItem.price * selectedQty) + addOns.reduce((s, a) => s + a.price, 0);
+        let html = `<div class="sum-row"><span>${selectedItem.name}${selectedQty > 1 ? " x" + selectedQty : ""}</span><span>&#8369;${(selectedItem.price * selectedQty).toFixed(2)}</span></div>`;
+        addOns.forEach(a => { html += `<div class="sum-row"><span>${a.name}</span><span>+&#8369;${a.price.toFixed(2)}</span></div>`; });
+        html += `<div class="sum-total"><span>This item</span><span>&#8369;${lineTotal.toFixed(2)}</span></div>`;
+        box.innerHTML = html;
+      }
+
+      /* ── Render: Payment summary (step 4) ── */
+      function renderPaymentSummary() {
+        const box = document.getElementById("payment-summary");
+        if (!box) return;
+        const grand = cart.reduce((s, e) => s + e.lineTotal, 0);
+        let html = "";
+        cart.forEach(e => { html += `<div class="sum-row"><span>${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}</span><span>&#8369;${e.lineTotal.toFixed(2)}</span></div>`; });
+        html += `<div class="sum-total"><span>Grand total</span><span>&#8369;${grand.toFixed(2)}</span></div>`;
+        box.innerHTML = html;
+      }
+
+      /* ── Actions ── */
+      function selectItem(it) {
+        selectedItem = it; selectedQty = 1;
+        document.getElementById("btn1").disabled = false;
+        buildItems();
+      }
+
+      function selectFeaturedItem(id) {
+        const item = ITEMS.find(x => x.id === id);
+        if (!item) return;
+        selectItem(item);
+        buildItems(); buildWeeklyBest();
+      }
+
+      function changeQty(change) {
+        selectedQty = Math.max(1, selectedQty + change);
+        buildItems();
+      }
+
+      function toggleAddon(id) {
+        const idx = selectedAddons.indexOf(id);
+        if (idx > -1) selectedAddons.splice(idx, 1); else selectedAddons.push(id);
+        buildAddons(); renderCurrentItemSummary();
+      }
+
+      function addToCart() {
+        if (!selectedItem) return;
+        const addOns = selectedAddons.map(id => ADDONS.find(x => x.id === id)).filter(Boolean);
+        const lineTotal = (selectedItem.price * selectedQty) + addOns.reduce((s, a) => s + a.price, 0);
+        cart.push({ item: selectedItem, qty: selectedQty, addons: addOns, lineTotal });
+        selectedItem = null; selectedAddons = []; selectedQty = 1;
+        buildCart(); buildAddons();
+        document.getElementById("current-item-summary").innerHTML = "";
+        buildItems();
+      }
+
+      function addAnotherItem() {
+        selectedItem = null; selectedAddons = []; selectedQty = 1;
+        buildItems(); buildAddons();
+        document.getElementById("current-item-summary").innerHTML = "";
+        goStep(1);
+      }
+
+      function removeFromCart(idx) {
+        cart.splice(idx, 1);
+        buildCart();
+      }
+
+      function selectOffice(o) {
+        selectedOffice = o;
+        document.querySelectorAll(".office-btn").forEach(b => b.classList.remove("selected"));
+        document.getElementById(o === "Camerino" ? "off-cam" : "off-gue").classList.add("selected");
+        document.getElementById("err-office").style.display = "none";
+      }
+
+      function selectDate(d) {
+        selectedDate = d;
+        buildDates();
+        document.getElementById("err-date").style.display = "none";
+      }
+
+      function selectPayment(p) {
+        selectedPayment = p;
+        document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("selected"));
+        const map = { "GCash": "pay-gcash", "Cash": "pay-cash", "Sa Sahod na Boss Oma": "pay-sahod" };
+        document.getElementById(map[p]).classList.add("selected");
+        document.getElementById("gcash-details").className = "gcash-details" + (p === "GCash" ? " show" : "");
+        document.getElementById("err-payment").style.display = "none";
+        renderPaymentSummary();
+      }
+
+      function clearErr(errId, inputId) {
+        document.getElementById(errId).style.display = "none";
+        if (inputId) document.getElementById(inputId).classList.remove("error");
+      }
+
+      /* ── Navigation ── */
+      function goStep(n) {
+        document.getElementById("step" + currentStep).classList.remove("active");
+        document.getElementById("step" + n).classList.add("active");
+        for (let i = 1; i <= 5; i++) {
+          document.getElementById("pl" + i).className = "prog-lbl" + (i < n ? " done" : i === n ? " active" : "");
+          document.getElementById("ps" + i).className = "prog-seg" + (i < n ? " done" : i === n ? " active" : "");
+        }
+        if (n === 2) { buildAddons(); renderCurrentItemSummary(); buildCart(); }
+        if (n === 3) { buildDates(); }
+        if (n === 4) { renderPaymentSummary(); }
+        currentStep = n;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function goToPayment() {
+        let valid = true;
+        const name = document.getElementById("f-name").value.trim();
+        if (!name) { document.getElementById("err-name").style.display = "block"; document.getElementById("f-name").classList.add("error"); valid = false; }
+        if (!selectedOffice) { document.getElementById("err-office").style.display = "block"; valid = false; }
+        if (!selectedDate) { document.getElementById("err-date").style.display = "block"; valid = false; }
+        if (valid) goStep(4);
+      }
+
+      /* ── Submit ── */
+      function openReviewModal() {
+        if (!selectedPayment) {
+          document.getElementById("err-payment").style.display = "block";
+          return;
+        }
+        const name = document.getElementById("f-name").value.trim();
+        if (!name) return;
+        const grand = cart.reduce((s, e) => s + e.lineTotal, 0);
+        let html = `
     <div class="sum-row"><span>Name</span><span>${name}</span></div>
     <div class="sum-row"><span>Office</span><span>${selectedOffice}</span></div>
     <div class="sum-row"><span>Pickup</span><span>${selectedDate}</span></div>
     <div class="sum-row"><span>Payment</span><span>${selectedPayment}</span></div>
     <div style="border-top:0.5px solid var(--border);margin:8px 0;padding-top:8px">`;
-  cart.forEach(e => {
-    const addons = e.addons.length ? " + " + e.addons.map(a=>a.name).join(", ") : "";
-    html += `<div class="sum-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}${addons}</span><span>₱${e.lineTotal.toFixed(2)}</span></div>`;
-  });
-  html += `</div><div class="sum-total"><span>Grand total</span><span>₱${grand.toFixed(2)}</span></div>`;
-  document.getElementById("modal-summary").innerHTML = html;
-  document.getElementById("review-modal").classList.add("show");
-}
+        cart.forEach(e => {
+          const addons = e.addons.length ? " + " + e.addons.map(a => a.name).join(", ") : "";
+          html += `<div class="sum-row"><span>${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}${addons}</span><span>₱${e.lineTotal.toFixed(2)}</span></div>`;
+        });
+        html += `</div><div class="sum-total"><span>Grand total</span><span>₱${grand.toFixed(2)}</span></div>`;
+        document.getElementById("modal-summary").innerHTML = html;
+        document.getElementById("review-modal").classList.add("show");
+      }
 
-function closeModal(e) {
-  if(e.target === document.getElementById("review-modal"))
-    document.getElementById("review-modal").classList.remove("show");
-}
+      function closeModal(e) {
+        if (e.target === document.getElementById("review-modal"))
+          document.getElementById("review-modal").classList.remove("show");
+      }
 
-function confirmAndSubmit() {
-  document.getElementById("review-modal").classList.remove("show");
-  submitOrder();
-}
+      function confirmAndSubmit() {
+        document.getElementById("review-modal").classList.remove("show");
+        submitOrder();
+      }
 
-function generateOrderNumber() {
-  return "ACS-" + Date.now().toString().slice(-6);
-}
+      async function submitOrder() {
+        const name = document.getElementById("f-name").value.trim();
+        const grand = cart.reduce((sum, e) => sum + e.lineTotal, 0);
+        const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("en-PH", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+        const timeStr = now.toLocaleTimeString("en-PH", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
 
-function submitOrder() {
-  const name = document.getElementById("f-name").value.trim();
-  const grand = cart.reduce((sum, e) => sum + e.lineTotal, 0);
-  const totalQty = cart.reduce((sum, e) => sum + e.qty, 0);
-  const orderNum = generateOrderNumber();
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("en-PH", {year:"numeric",month:"long",day:"numeric"});
-  const timeStr = now.toLocaleTimeString("en-PH", {hour:"2-digit",minute:"2-digit"});
+        const itemNames = cart.map(e => `${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}`).join(" | ");
+        const itemPrices = cart.map(e => `${(e.item.price * e.qty).toFixed(2)}`).join(" | ");
+        const addonsText = cart.map(e =>
+          e.addons.length
+            ? `${e.item.name}: ${e.addons.map(a => a.name).join(", ")}`
+            : `${e.item.name}: None`
+        ).join(" | ");
+        const addonsPrices = cart.map(e => {
+          const total = e.addons.reduce((s, a) => s + a.price, 0);
+          return total > 0 ? total.toFixed(2) : "None";
+        }).join(" | ");
 
-  const itemNames = cart.map(e => `${e.item.name}${e.qty>1?" x"+e.qty:""}`).join(" | ");
-  const itemPrices = cart.map(e => `${(e.item.price*e.qty).toFixed(2)}`).join(" | ");
-  const addonsText = cart.map(e => e.addons.length ? `${e.item.name}: ${e.addons.map(a=>a.name).join(", ")}` : `${e.item.name}: None`).join(" | ");
-  const addonsPrices = cart.map(e => {
-    const total = e.addons.reduce((s,a) => s+a.price, 0);
-    return total > 0 ? total.toFixed(2) : "None";
-  }).join(" | ");
+        const order = {
+          action: "createOrder",
+          name,
+          office: selectedOffice,
+          item: itemNames,
+          itemPrice: itemPrices,
+          addons: addonsText,
+          addonsPrice: addonsPrices,
+          total: grand,
+          quantity: totalQty,
+          payment: selectedPayment
+        };
 
-  const order = { name, office: selectedOffice, item: itemNames, itemPrice: itemPrices, addons: addonsText, addonsPrice: addonsPrices, total: grand, quantity: totalQty, payment: selectedPayment, orderNumber: orderNum };
+        const placeBtn = document.querySelector('#step4 .btn-primary');
+        const originalBtnText = placeBtn.innerHTML;
 
-  fetch("https://script.google.com/macros/s/AKfycbym6wPRI4s5gQpOk1LwfIOGoqDPdz4qzko8wqit_c7ELXux2VPXp6MDry5EtcOPBa6PEQ/exec", {
-    method: "POST",
-    headers: {"Content-Type":"text/plain"},
-    body: JSON.stringify(order)
-  }).catch(() => {});
+        try {
+          placeBtn.disabled = true;
+          placeBtn.innerHTML = "Submitting...";
 
-  document.getElementById("confirm-msg").textContent =
-    `Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
+          const response = await fetch("https://script.google.com/macros/s/AKfycbzViFAj7VRdaf1Xabkg4O7d0-b8zc_uXcvepRWgY1TJLfxcWB265iH4AdAYeU9H35X_eA/exec", {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(order)
+          });
 
-  // Build receipt
-  let itemRows = "";
-  cart.forEach(e => {
-    itemRows += `<div class="receipt-row"><span>${e.item.name}${e.qty>1?" x"+e.qty:""}</span><span>₱${(e.item.price*e.qty).toFixed(2)}</span></div>`;
-    if(e.addons.length) {
-      e.addons.forEach(a => {
-        itemRows += `<div class="receipt-row addon"><span>+ ${a.name}</span><span>₱${a.price.toFixed(2)}</span></div>`;
-      });
-    }
-  });
+          const result = await response.json();
 
-  document.getElementById("receipt-wrap").innerHTML = `
-    <div class="receipt">
-      <div class="receipt-header">
-        <div class="receipt-brand">ACS Burgers</div>
-        <div class="receipt-sub">Official Order Receipt</div>
-        <div class="receipt-num">${orderNum}</div>
-        <div class="receipt-meta">${dateStr} · ${timeStr}</div>
+          if (!result.success) {
+            throw new Error(result.error || "Order failed.");
+          }
+
+          const orderNum = result.orderNumber || "N/A";
+
+          document.getElementById("confirm-msg").textContent =
+            `Thank you, ${name}! Your order is confirmed for ${selectedDate} at the ${selectedOffice} office.`;
+
+          let itemRows = "";
+          cart.forEach(e => {
+            itemRows += `<div class="receipt-row"><span>${e.item.name}${e.qty > 1 ? " x" + e.qty : ""}</span><span>₱${(e.item.price * e.qty).toFixed(2)}</span></div>`;
+            if (e.addons.length) {
+              e.addons.forEach(a => {
+                itemRows += `<div class="receipt-row addon"><span>+ ${a.name}</span><span>₱${a.price.toFixed(2)}</span></div>`;
+              });
+            }
+          });
+
+          document.getElementById("receipt-wrap").innerHTML = `
+      <div class="receipt">
+        <div class="receipt-header">
+          <div class="receipt-brand">ACS Burgers</div>
+          <div class="receipt-sub">Official Order Receipt</div>
+          <div class="receipt-num">${orderNum}</div>
+          <div class="receipt-meta">${dateStr} · ${timeStr}</div>
+        </div>
+        <div class="receipt-section">
+          <div class="receipt-row"><span>Customer</span><span>${name}</span></div>
+          <div class="receipt-row"><span>Office</span><span>${selectedOffice}</span></div>
+          <div class="receipt-row"><span>Pickup</span><span>${selectedDate}</span></div>
+          <div class="receipt-row"><span>Payment</span><span>${selectedPayment}</span></div>
+        </div>
+        <div class="receipt-section">${itemRows}</div>
+        <div class="receipt-total-row"><span>TOTAL</span><span>₱${grand.toFixed(2)}</span></div>
+        <div class="receipt-footer">Thank you for your order! 🍔<br>This serves as your official receipt.</div>
       </div>
-      <div class="receipt-section">
-        <div class="receipt-row"><span>Customer</span><span>${name}</span></div>
-        <div class="receipt-row"><span>Office</span><span>${selectedOffice}</span></div>
-        <div class="receipt-row"><span>Pickup</span><span>${selectedDate}</span></div>
-        <div class="receipt-row"><span>Payment</span><span>${selectedPayment}</span></div>
+      <button class="btn-print" onclick="window.print()">🖨 Print / Save receipt</button>`;
+
+          goStep(5);
+
+        } catch (error) {
+          alert("Order failed: " + error.message);
+          console.error("Submit order error:", error);
+        } finally {
+          placeBtn.disabled = false;
+          placeBtn.innerHTML = originalBtnText;
+        }
+      }
+    </script>
+    <!-- Order Review Modal -->
+    <div class="modal-overlay" id="review-modal" onclick="closeModal(event)">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <p class="modal-title">Review your order</p>
+        <p class="modal-sub">Please check everything before confirming.</p>
+        <div class="summary-box" id="modal-summary" style="background:#1f2027"></div>
+        <button class="btn-primary"
+          style="margin-top:12px;background:linear-gradient(135deg,#f0d98a,#e8c96a);color:#1f2027"
+          onclick="confirmAndSubmit()">✓ Confirm & place order</button>
+        <button class="btn-back" style="width:100%;justify-content:center;margin-top:10px;margin-bottom:0"
+          onclick="document.getElementById('review-modal').classList.remove('show')">Cancel</button>
       </div>
-      <div class="receipt-section">${itemRows}</div>
-      <div class="receipt-total-row"><span>TOTAL</span><span>₱${grand.toFixed(2)}</span></div>
-      <div class="receipt-footer">Thank you for your order! 🍔<br>This serves as your official receipt.</div>
     </div>
-    <button class="btn-print" onclick="window.print()">🖨 Print / Save receipt</button>`;
-
-  goStep(5);
-}
-  
-  /* ── Reset ── */
-  function resetApp(){
-    selectedItem=null;selectedAddons=[];selectedQty=1;
-    cart=[];selectedOffice="";selectedDate="";selectedPayment="";
-    document.getElementById("f-name").value="";
-    document.querySelectorAll(".office-btn,.pay-btn").forEach(b=>b.classList.remove("selected"));
-    document.getElementById("gcash-details").className="gcash-details";
-    document.getElementById("btn1").disabled=true;
-    currentStep=1; goStep(1);
-    buildItems(); buildWeeklyBest();
-  }
-  
-  buildItems();
-  buildWeeklyBest();
-  </script>
-  <!-- Order Review Modal -->
-<div class="modal-overlay" id="review-modal" onclick="closeModal(event)">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <p class="modal-title">Review your order</p>
-    <p class="modal-sub">Please check everything before confirming.</p>
-    <div class="summary-box" id="modal-summary" style="background:#1f2027"></div>
-    <button class="btn-primary" style="margin-top:12px;background:linear-gradient(135deg,#f0d98a,#e8c96a);color:#1f2027" onclick="confirmAndSubmit()">✓ Confirm & place order</button>
-    <button class="btn-back" style="width:100%;justify-content:center;margin-top:10px;margin-bottom:0" onclick="document.getElementById('review-modal').classList.remove('show')">Cancel</button>
-  </div>
-</div>
 </body>
+
 </html>
