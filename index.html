@@ -1752,6 +1752,21 @@
           placeBtn.innerHTML = originalBtnText;
         }
       }
+
+      /* ── Reset ── */
+      function resetApp() {
+        selectedItem = null; selectedAddons = []; selectedQty = 1;
+        cart = []; selectedOffice = ""; selectedDate = ""; selectedPayment = "";
+        document.getElementById("f-name").value = "";
+        document.querySelectorAll(".office-btn,.pay-btn").forEach(b => b.classList.remove("selected"));
+        document.getElementById("gcash-details").className = "gcash-details";
+        document.getElementById("btn1").disabled = true;
+        currentStep = 1; goStep(1);
+        buildItems(); buildWeeklyBest();
+      }
+
+      buildItems();
+      buildWeeklyBest();
     </script>
     <!-- Order Review Modal -->
     <div class="modal-overlay" id="review-modal" onclick="closeModal(event)">
