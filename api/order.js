@@ -16,29 +16,28 @@ export default async function handler(req, res) {
 
   try {
     // pull the order details out of req.body
-    const {
-      name,
-      office,
-      date,
-      payment,
-      items,
-      total,
-      orderNumber
-    } = req.body;
+const {
+  name,
+  office,
+  item,
+  itemPrice,
+  addons,
+  addonsPrice,
+  total,
+  quantity,
+  payment
+} = req.body;
 
-    // save the order to supabase
-    const { error } = await supabase
-      .from("orders")
-      .insert([{
-        customer_name: name,
-        office:        office,
-        pickup_date:   date,
-        payment:       payment,
-        items:         items,
-        total:         total,
-        order_number:  orderNumber,
-        status:        "pending"
-      }]);
+const { error } = await supabase
+  .from("orders")
+  .insert([{
+    customer_name: name,
+    office:        office,
+    payment:       payment,
+    items:         { item, itemPrice, addons, addonsPrice, quantity },
+    total:         total,
+    status:        "pending"
+  }]);
 
     // if supabase returned an error, throw it
     if (error) throw error;
